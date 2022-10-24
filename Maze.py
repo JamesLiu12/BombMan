@@ -1,5 +1,5 @@
-from BombMan.EmptySpace import EmptySpace
-from Wall import Wall
+from EmptySpace import EmptySpace
+from Player import Player
 
 
 class Maze:
@@ -22,11 +22,25 @@ class Maze:
             mid = lb + rb >> 1
             if objectList[mid].priority < insertedObject.priority: lb = mid + 1
             else: rb = mid - 1
-            objectList.insert(rb, insertedObject)
+            objectList.insert(lb, insertedObject)
+    def DeleteObject(self, posx, posy, obj):
+        objIndex = None
+        for i in range(self.objectLists[posx][posy]):
+            if self.objectLists[posx][posy][i] == obj:
+                objIndex = i
+                break
+        if objIndex != None: del self.objectLists[posx][posy][objIndex]
     def updateGrid(self, posx, posy):
         objectList = self.objectLists[posx][posy]
         for obj in objectList:
-            self.grids[posx][posy] = [obj.grids[i][j] if obj.grids[i][j] != None else self.grids[posx][posy] for j in range(6) for i in range(3)]
+            if type(obj) == Player:
+                player = obj
+                if player.posx == posx and player.posy == player.posy: #Leaving
+                    pass
+                else: #Entering
+                    pass
+            else:
+                self.grids[posx][posy] = [obj.grids[i][j] if obj.grids[i][j] != None else self.grids[posx][posy] for j in range(6) for i in range(3)]
     def IsBolckPlayer(self, posx, posy):
         for obj in self.objectLists[posx][posy]:
             if obj.isBlockPlayer: return True

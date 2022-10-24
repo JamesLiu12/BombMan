@@ -1,5 +1,4 @@
 import os
-from winsound import PlaySound
 from Maze import Maze
 import time
 
@@ -15,10 +14,15 @@ class Runner:
         while not gameOver:
             for player in players:
                 if player.IsMoving():
+                    newPosx, newPosy = player.posx + player.dirx, player.posy + player.posy
                     if not player.IsCanMove(): continue
                     player.Move()
+                    if player.IsEndMove():
+                        maze.DeleteObject(player.posx, player.posy)
+                        player.InitPart()
+                    else:
+                        maze.updateGrid(newPosx, newPosy)
                     maze.updateGrid(player.posx, player.posy)
-                    maze.updateGrid(player.posx + player.dirx, player.posy + player.posy)
                 else:
                     dirx, diry = player.GetMove()
                     if dirx == 0 and diry == 0: continue

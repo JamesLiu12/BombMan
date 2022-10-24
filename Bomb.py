@@ -4,6 +4,6 @@ class Bomb():
         self.damage = damage
         self.distance = distance
         self.isBlockPlayer = True
-        self.isBlockLaser = False
+        self.isBlockBeam = False
         self.priority = 1
         # self.grids

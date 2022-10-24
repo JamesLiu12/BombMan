@@ -14,20 +14,23 @@ class Player:
         self.dirx = 0
         self.diry = 0
         self.atk = 1
-        self.inLaser = False
+        self.inBeam = False
         self.inDamage = False
         self.isBlockPlayer = True
-        self.isBlockLaser = False
+        self.isBlockBeam = False
         self.preMoveTime = 0
         self.parts = (3, 6)
+        self.priority = 2
         # self.grids
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
-        #TODO
-        if self.inMove or self.inLaser or self.inDamage: return 0, 0
-        if keyboard.is_pressed(self.key_up):
+        #TODO AA
+        if self.inMove or self.inBeam or self.inDamage: return 0, 0
+        if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
             return -1, 0
+        elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
+            return 1, 0
     def Move(self):
         self.parts += (self.dirx, self.diry)
     def StartMove(self, dirx, diry):
@@ -40,3 +43,5 @@ class Player:
         return 1 / self.speed / (3 if axis == 0 else 6)
     def IsCanMove(self, axis):
         return time.perf_counter() - self.preMoveTime >= self.GetTimeGap(axis)
+    def InitPart(self):
+        self.dirx, self.diry = 3, 6
