@@ -1,5 +1,5 @@
 from UI import UI
-class GameEndUI(UI):
+class GameEndUI():
     def __init__(self) -> None:
         GameEndUI.quit = UI()
     # input winner
