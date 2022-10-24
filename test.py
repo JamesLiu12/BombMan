@@ -1,6 +1,6 @@
-# from time import sleep
-# from pynput import keyboard
-# import os
+import time
+from pynput import keyboard
+import os
 # import msvcrt
 # def press(key):
 #     print(key)
@@ -16,11 +16,6 @@
 #     if keyboard.is_pressed('s'):
 #         print('s')
 #     sleep(1/60)
-class A:
-    def __init__(self) -> None:
-        self.a = 1
-a = A()
-g = [a]
-del g[0]
-print(len(g))
-print(a.a)
+while True:
+    print(float(time.perf_counter()))
+    time.sleep(0.2)

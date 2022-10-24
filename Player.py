@@ -1,7 +1,7 @@
 import keyboard
 import time
 class Player:
-    def __init__(self, key_up, key_down, key_left, key_right, id, posx, posy, HP = 3, speed = 1):
+    def __init__(self, key_up, key_down, key_left, key_right, id, posx, posy, color, HP = 3, speed = 4):
         self.HP = HP
         self.speed = speed
         self.key_up = key_up
@@ -11,6 +11,7 @@ class Player:
         self.id = id
         self.posx = posx
         self.posy = posy
+        self.color = color
         self.dirx = 0
         self.diry = 0
         self.atk = 1
@@ -19,29 +20,42 @@ class Player:
         self.isBlockPlayer = True
         self.isBlockBeam = False
         self.preMoveTime = 0
-        self.parts = (3, 6)
+        self.parts = [3, 6]
+        self.damageMade = 0
+        self.numberKilled = 0
         self.priority = 2
-        # self.grids
+        self.grids=[['_', '_', '⁔', '_', '_', None], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, "\\", None]]
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
         #TODO AA
-        if self.inMove or self.inBeam or self.inDamage: return 0, 0
+        if self.IsMoving() or self.inBeam or self.inDamage: return 0, 0
         if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
             return -1, 0
         elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
             return 1, 0
+        elif keyboard.is_pressed(self.key_left) and not keyboard.is_pressed(self.key_right):
+            return 0, -1
+        elif keyboard.is_pressed(self.key_right) and not keyboard.is_pressed(self.key_left):
+            return 0, 1
+        else: return 0, 0
     def Move(self):
-        self.parts += (self.dirx, self.diry)
+        if self.dirx != 0: self.parts[0] -= 1
+        else: self.parts[1] -= 1
+        self.preMoveTime = float(time.perf_counter())
     def StartMove(self, dirx, diry):
         self.dirx = dirx
         self.diry = diry
     def IsEndMove(self):
-        return self.dirx == 0 or self.diry == 0
+        return self.parts[0] == 0 or self.parts[1] == 0
     def ChangeHP(self, x): self.HP += x
     def GetTimeGap(self, axis):
         return 1 / self.speed / (3 if axis == 0 else 6)
     def IsCanMove(self, axis):
-        return time.perf_counter() - self.preMoveTime >= self.GetTimeGap(axis)
-    def InitPart(self):
-        self.dirx, self.diry = 3, 6
+        return float(time.perf_counter()) - self.preMoveTime >= self.GetTimeGap(axis)
+    def InitParts(self):
+        self.parts = [3, 6]
+    def InitDir(self):
+        self.dirx, self.diry = 0, 0
+    def SetPos(self, posx, posy):
+        self.posx, self.posy = posx, posy
