@@ -1,9 +1,9 @@
-from MoveObject import MoveObject
 import keyboard
-
-class Player(MoveObject):
+import time
+class Player:
     def __init__(self, key_up, key_down, key_left, key_right, id, posx, posy, HP = 3, speed = 1):
-        super().__init__(HP, speed)
+        self.HP = HP
+        self.speed = speed
         self.key_up = key_up
         self.key_down = key_down
         self.key_left = key_left
@@ -13,19 +13,30 @@ class Player(MoveObject):
         self.posy = posy
         self.dirx = 0
         self.diry = 0
-        self.inMove = False
+        self.atk = 1
         self.inLaser = False
-        self.blockPlayer = True
+        self.inDamage = False
+        self.isBlockPlayer = True
+        self.isBlockLaser = False
+        self.preMoveTime = 0
+        self.parts = (3, 6)
         # self.grids
-    
-    def GetMove(self):
+    def IsMoving(self):
+        return self.dirx != 0 or self.diry != 0
+    def GetMoveDir(self):
         #TODO
-        if self.inMove or self.inLaser: return 0, 0
+        if self.inMove or self.inLaser or self.inDamage: return 0, 0
         if keyboard.is_pressed(self.key_up):
-            self.inMove = True
             return -1, 0
-    def ChangeHP(self, x): self.HP += x
+    def Move(self):
+        self.parts += (self.dirx, self.diry)
     def StartMove(self, dirx, diry):
-        self.inMove = True
         self.dirx = dirx
         self.diry = diry
+    def IsEndMove(self):
+        return self.dirx == 0 or self.diry == 0
+    def ChangeHP(self, x): self.HP += x
+    def GetTimeGap(self, axis):
+        return 1 / self.speed / (3 if axis == 0 else 6)
+    def IsCanMove(self, axis):
+        return time.perf_counter() - self.preMoveTime >= self.GetTimeGap(axis)

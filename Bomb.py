@@ -3,6 +3,7 @@ class Bomb():
         super().__init__(0x3f3f3f3f, speed)
         self.damage = damage
         self.distance = distance
-        self.blockPlayer = True
-        self.blockLaser = False
+        self.isBlockPlayer = True
+        self.isBlockLaser = False
+        self.priority = 1
         # self.grids
