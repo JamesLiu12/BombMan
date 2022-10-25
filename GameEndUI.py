@@ -1,7 +1,7 @@
-from contral import Control
+from UI import *
 class GameEndUI():
     def __init__(self) -> None:
-        GameEndUI.quit = Control()
+        GameEndUI.quit = UI()
     # input winner
 
     def endpic(self,winner,surviver):
@@ -29,6 +29,7 @@ class GameEndUI():
         while quit!=2:
               print('use key ENTER to quit game')
               quit = GameEndUI.quit.getdir()
-        #quit function
+        
 n= GameEndUI()
-n.endpic('Player2','Player2')
+# n.endpic('Player2','Player2')
+n.outrank([1,2,3,4])
