@@ -1,12 +1,12 @@
 import sys
 import time
-from UI import UI
-from Runner import Runner
-
+from UI import *
+# from Runner import Runner
+import os
 class startUI():
     def __init__(press):
         startUI.choice = UI()
-        startUI.run = Runner(30)
+        # startUI.run = Runner(30)
     def title(self):
         print("""\033[1;47;31m       
                     .-'''-.                                                                              
@@ -42,7 +42,7 @@ class startUI():
         menul = ['Start','Setting','Quit']
       
         print('\r')
-        print('\033[1;47;31muse direction key to control,↑ and --> means go right menu, ↓ and <-- means go left menu \033[0m')
+        print('\033[1;47;31muse direction key to control,w and d means go right menu, s and a means go left menu,use e to choose \033[0m')
         pointer = 0
         menul.insert(pointer,'*')
         
@@ -62,14 +62,15 @@ class startUI():
             print('\r',' '.join(menul),end="",flush=True)
             choose = startUI().choice.getdir()
         if pointer ==0:
-           startUI.run.Run()
+        #    startUI.run.Run()
+            pass
         elif pointer == 1:
             pass         #add setting menu!!!!!!!!
         elif pointer == 2:
-            pass         #add quit function !!!!!!!
+            os._exit(0)        
 
         
-# n = startUI()
+n = startUI()
 
-# p=n.menu()
+p=n.menu()
 # print(p)
