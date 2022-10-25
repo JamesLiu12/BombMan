@@ -5,27 +5,6 @@ import tty
 import termios
 import sys
 class Player:
-    """
-    def readchar():
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-            return ch
-    def readkey(getchar_fn=None):
-        getchar = getchar_fn or readchar
-        c1 = getchar()
-        if ord(c1) != 0x1b:
-            return c1
-        c2 = getchar()
-        if ord(c2) != 0x5b:
-            return c2
-        c3 = getchar()
-        return chr(0x10 + ord(c3) - 65)
-        """
     def __init__(self, key_up, key_down, key_left, key_right, id, posx, posy, color, HP = 3, speed = 4):
         self.HP = HP
         self.speed = speed
@@ -52,8 +31,6 @@ class Player:
         self.grids=[[None, '_', '_', '△', '_', '_'], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, None, "\\"]]
         self.firstvertical=False
         self.firsthorizontal=False
-        #self.pressedkey=None
-        #self.validkeylist=[self.key_down,self.key_up,self.key_left,sekf.key_right]
     def read(self):
         fil= sys.stdin.fileno()
         osl = termios.tcgetattr(fil)
@@ -90,18 +67,6 @@ class Player:
         ifright=(key==self.key_right)
         ifup=(key==self.key_up)
         ifdown=(key==self.key_down)
-        
-        """
-        keyslist=keyspressed
-        isleft=keyslist[pygame.K_LEFT]
-        isright=keyslist[pygame.K_RIGHT]
-        isup=keyslist[pygame.K_UP]
-        isdown=keyslist[pygame.K_DOWN]
-        print(True in keyslist,'asd',pygame.key.get_focused())
-        print(pygame.K_LEFT,keyslist[pygame.K_LEFT],pygame.K_RIGHT,keyslist[pygame.K_RIGHT])
-        #读取不出来哼啊啊啊啊啊啊啊
-        """
-        
         isvertical= isdown or isup
         ishorizontal= isright or isleft
         moveX=isdown-isup
