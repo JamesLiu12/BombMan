@@ -52,7 +52,7 @@ class Player:
         return chr(0x10 + ord(c3) - 65)
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
-    def GetMoveDir(self,keyspressed):
+    def GetMoveDir(self):
         #TODO AA
         if self.IsMoving() or self.inBeam or self.inDamage: 
             return 0, 0
@@ -63,10 +63,10 @@ class Player:
         isleft=keyboard.is_pressed(self.key_left)
         isright=keyboard.is_pressed(self.key_right)
         """
-        ifleft=(key==self.key_left)
-        ifright=(key==self.key_right)
-        ifup=(key==self.key_up)
-        ifdown=(key==self.key_down)
+        isleft=(key==self.key_left)
+        isright=(key==self.key_right)
+        isup=(key==self.key_up)
+        isdown=(key==self.key_down)
         isvertical= isdown or isup
         ishorizontal= isright or isleft
         moveX=isdown-isup
