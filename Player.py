@@ -24,12 +24,35 @@ class Player:
         self.damageMade = 0
         self.numberKilled = 0
         self.priority = 2
-        self.grids=[['_', '_', '⁔', '_', '_', None], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, "\\", None]]
+        self.grids=[[None, '_', '_', '△', '_', '_'], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, None, "\\"]]
+        self.firstvertical=False
+        self.firsthorizontal=False
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
         #TODO AA
-        if self.IsMoving() or self.inBeam or self.inDamage: return 0, 0
+        if self.IsMoving() or self.inBeam or self.inDamage: 
+            return 0, 0
+        isdown=keyboard.is_pressed(self.key_down)
+        isup=keyboard.is_pressed(self.key_up)
+        isleft=keyboard.is_pressed(self.key_left)
+        isright=keyboard.is_pressed(self.key_right)
+        isvertical= isdown or isup
+        ishorizontal= isright or isleft
+        moveX=isdown-isup
+        moveY=isright-isleft
+        if isvertical and not ishorizontal:
+            self.firstvertical=True
+            self.firsthorizontal=False
+        if ishorizontal and not isvertical:
+            self.firsthorizontal=True
+            self.firstvertical=False
+        if (isvertical and ishorizontal):
+            moveX*=self.firsthorizontal
+            moveY*=self.firstvertical
+        return moveX, moveY
+
+        """
         if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
             return -1, 0
         elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
@@ -38,7 +61,7 @@ class Player:
             return 0, -1
         elif keyboard.is_pressed(self.key_right) and not keyboard.is_pressed(self.key_left):
             return 0, 1
-        else: return 0, 0
+        else: return 0, 0"""
     def Move(self):
         if self.dirx != 0: self.parts[0] -= 1
         else: self.parts[1] -= 1
