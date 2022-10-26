@@ -1,4 +1,6 @@
-import keyboard
+import tty
+import termios
+import sys
 import time
 from colorama import Fore, Back, Style
 from BaseObject import BaseObject
@@ -36,23 +38,61 @@ class Player(BaseObject):
         self.priority = 1
         self.grids = [['_', '_', '⁔', '_', '_', None], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, "\\", None]]
         self.foreColors = [[Fore.WHITE for j in range(6)] for i in range(3)]
+    
+    def read(self):
+        fil= sys.stdin.fileno()
+        osl = termios.tcgetattr(fil)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fil, termios.TCSADRAIN, osl)
+        return ch
+    def readkey(self,fn=None):
+        getchar= self.read()or fn
+        c1 = self.read()
+        if ord(c1) != 0x1b:
+            return c1
+        c2 = getchar()
+        if ord(c2) != 0x5b:
+            return c1
+        c3 = getchar()
+        return chr(0x10 + ord(c3) - 65)
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
         #TODO AA
-        if self.IsMoving() or self.inBeam or self.inDamage: return 0, 0
-        if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
-            return -1, 0
-        elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
-            return 1, 0
-        elif keyboard.is_pressed(self.key_left) and not keyboard.is_pressed(self.key_right):
-            return 0, -1
-        elif keyboard.is_pressed(self.key_right) and not keyboard.is_pressed(self.key_left):
-            return 0, 1
-        else: return 0, 0
+        if self.IsMoving() or self.inBeam or self.inDamage: 
+            return 0, 0
+        key = self.readkey()
+        """
+        isdown=keyboard.is_pressed(self.key_down)
+        isup=keyboard.is_pressed(self.key_up)
+        isleft=keyboard.is_pressed(self.key_left)
+        isright=keyboard.is_pressed(self.key_right)
+        """
+        isleft=(key==self.key_left)
+        isight=(key==self.key_right)
+        isup=(key==self.key_up)
+        isdown=(key==self.key_down)
+        isvertical= isdown or isup
+        ishorizontal= isright or isleft
+        moveX=isdown-isup
+        moveY=isright-isleft
+        if isvertical and not ishorizontal:
+            self.firstvertical=True
+            self.firsthorizontal=False
+        if ishorizontal and not isvertical:
+            self.firsthorizontal=True
+            self.firstvertical=False
+        if (isvertical and ishorizontal):
+            moveX*=self.firsthorizontal
+            moveY*=self.firstvertical
+        return moveX, moveY
     def IsSetBombPress(self):
+        key = self.readkey()
         if float(time.perf_counter()) - self.preSetBombTime < self.setBombTimeGap: return False
-        return keyboard.is_pressed(self.key_setBomb)
+        return key==self.key_setBomb
     def SetBomb(self, bomb):
         self.bombs.append(bomb)
         self.preSetBombTime = float(time.perf_counter())
