@@ -1,7 +1,13 @@
+from re import L
 import keyboard
 import time
 from colorama import Fore, Back, Style
+from Item_ATKup import Item_ATKup
 from BaseObject import BaseObject
+from Item_BombDelayDown import Item_BombDelayDown
+from Item_BombTimeGapDown import Item_BombTimeGapDown
+from Item_HPup import Item_HPup
+from Item_SPDup import Item_SPDup
 class Player(BaseObject):
     def __init__(self, key_up, key_down, key_left, key_right, key_setBomb, id, posx, posy, HP = 3, speed = 4, bombDelay = 2):
         super().__init__()
@@ -31,6 +37,7 @@ class Player(BaseObject):
         self.parts = [3, 6]
         self.bombs = []
         self.beams = []
+        self.buffs = []
         self.bombDistance = 3
         self.bombDelay = 1.5
         self.damageMade = 0
@@ -85,6 +92,14 @@ class Player(BaseObject):
             if self.IsInDamage(): return
             self.GetDamage()
         self.HP += x
+    def ChangeATK(self, x):
+        self.atk += x
+    def ChangeSpeed(self, x):
+        self.speed += x
+    def ChangeBombDelay(self, x):
+        self.bombDelay += x
+    def ChangeSetBombTimeGap(self, x):
+        self.setBombTimeGap += x
     def GetTimeGap(self, axis):
         return 1 / self.speed / (3 if axis == 0 else 6)
     def IsCanMove(self, axis):
@@ -99,3 +114,32 @@ class Player(BaseObject):
         return self.HP <= 0
     def IsBelongTo(self, typ):
         return typ == Player or super().IsBelongTo(typ)
+    def GetItem(self, item):
+        if item.delay != None: self.buffs.append((item, time.perf_counter()))
+        if item.IsBelongTo(Item_ATKup):
+            self.ChangeATK(item.val)
+        elif item.IsBelongTo(Item_HPup):
+            self.ChangeHP(item.val)
+        elif item.IsBelongTo(Item_SPDup):
+            self.ChangeSpeed(item.val)
+        elif item.IsBelongTo(Item_BombDelayDown):
+            self.ChangeBombDelay(item.val)
+        elif item.IsBelongTo(Item_BombTimeGapDown):
+            self.ChangeSetBombTimeGap(item.val)
+        
+    def CheckItems(self):
+        deleteList = []
+        for buff in self.buffs:
+            item, setTime = buff
+            if float(time.perf_counter()) - setTime >= item.delay:
+                deleteList.append(buff)
+                if item.IsBelongTo(Item_ATKup):
+                    self.ChangeATK(-item.val)
+                elif item.IsBelongTo(Item_SPDup):
+                    self.ChangeSpeed(-item.val)
+                elif item.IsBelongTo(Item_BombDelayDown):
+                    self.ChangeBombDelay(-item.val)
+                elif item.IsBelongTo(Item_BombTimeGapDown):
+                    self.ChangeSetBombTimeGap(-item.val)
+        for buff in deleteList:
+            self.buffs.remove(buff)

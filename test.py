@@ -23,6 +23,11 @@ import os
 #     while True:
 #         print('1')
 #         time.sleep(0.1)
-def a():
-    return 1 or a()
-print(a())
+class A():
+    def __init__(self) -> None:
+        pass
+b = (0, A())
+l = [b]
+for x in l:
+    print(id(x))
+print(id(l[0]))

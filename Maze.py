@@ -1,8 +1,11 @@
 from ast import Delete
 from EmptySpace import EmptySpace
+from Item import Item
 from Obstacle import Obstacle
 from Player import Player
 from colorama import Fore, Back, Style
+from UnbreakWall import UnbreakWall
+from Wall import Wall
 
 class Maze:
     def __init__(self, height, width):
@@ -12,6 +15,12 @@ class Maze:
         self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
+        for i in range(self.height):
+            self.InsertObject(UnbreakWall(), i, 0)
+            self.InsertObject(UnbreakWall(), i, self.width - 1)
+        for i in range(self.width):
+            self.InsertObject(UnbreakWall(), 0, i)
+            self.InsertObject(UnbreakWall(), self.height - 1, i)
     def Show(self):
         for i in range(self.height):
             for j in range(3):
@@ -113,9 +122,9 @@ class Maze:
         for obj in deadList:
             if obj.IsBelongTo(Obstacle):
                 if obj.item != None:
-                    self.InsertObject(obj.item)
+                    self.InsertObject(obj.item, posx, posy)
             elif obj.IsBelongTo(Player):
-                if obj.IsMoving(): self.DeleteObject(posx + obj.dirx, posy + obj.diry)
+                if obj.IsMoving(): self.DeleteObject(posx + obj.dirx, posy + obj.diry, obj)
             self.DeleteObject(posx, posy, obj)
             
     def GenerateBeam(self, posx, posy, beam):
@@ -127,9 +136,11 @@ class Maze:
                 newPosx = posx + dirx * i
                 newPosy = posy + diry * i
                 if self.IsOutOfRange(newPosx, newPosy): break
+                isBlock = False
+                if self.IsBlockBeam(newPosx, newPosy): isBlock = True
                 self.BeamEffect(newPosx, newPosy, beam.damage)
                 self.InsertObject(beam, newPosx, newPosy)
-                if self.IsBlockBeam(newPosx, newPosy): break
+                if isBlock: break
     def IsOutOfRange(self, posx, posy):
         return posx < 0 or posx >= self.height or posy < 0 or posy >= self.width
     def DestroyBeam(self, posx, posy, beam):
@@ -140,9 +151,14 @@ class Maze:
                 newPosx = posx + dirx * i
                 newPosy = posy + diry * i
                 if self.IsOutOfRange(newPosx, newPosy): break
-                self.BeamEffect(newPosx, newPosy, beam.damage)
                 self.DeleteObject(newPosx, newPosy, beam)
     def IsContainType(self, posx, posy, typ):
         for obj in self.objectLists[posx][posy]:
             if obj.IsBelongTo(typ): return True
         return False
+    def PeakUpItem(self, posx, posy, player):
+        for obj in self.objectLists[posx][posy]:
+            if obj.IsBelongTo(Item):
+                player.GetItem(obj)
+                self.DeleteObject(posx, posy, obj)
+                return

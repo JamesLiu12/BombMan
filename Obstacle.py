@@ -1,5 +1,5 @@
 from BaseObject import BaseObject
-
+from colorama import Fore, Back, Style
 
 class Obstacle(BaseObject):
     def __init__(self, item = None):
@@ -7,8 +7,9 @@ class Obstacle(BaseObject):
         self.HP = None
         self.isBlockPlayer = True
         self.isBlockBeam = True
-        self.priority = 4
+        self.priority = 5
         self.item = item
+        self.foreColors = [[Fore.WHITE for j in range(6)] for i in range(3)]
     def ChangeHP(self, val):
         self.HP += val
 
