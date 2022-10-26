@@ -162,3 +162,6 @@ class Maze:
                 player.GetItem(obj)
                 self.DeleteObject(posx, posy, obj)
                 return
+    def IsPosSafe(self, posx, posy):
+        #TODO
+        return True

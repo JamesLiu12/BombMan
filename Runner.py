@@ -11,16 +11,9 @@ from Player import Player
 from Wall import Wall
 
 class Runner:
-    def __init__(self, fps, typ1, typ2, typ3, typ4):
+    def __init__(self, fps):
         self.fps = fps
         self.players = []
-        self.bots = []
-        classList = [(typ1, 0, 0), (typ2, 0, 12), (typ3, 12, 12), (typ4, 12, 0)]
-        for typ, posx, posy in classList:
-            if typ == Player:
-                self.players.append(Player())
-            if typ == Bot:
-                self.bots.append()
     def Run(self):
         maze = Maze(13, 13)
         maze.InsertObject(Wall(2, Item_HPup()), 2, 2)
@@ -28,11 +21,11 @@ class Runner:
         maze.InsertObject(Wall(2), 6, 6)
         p1 = Player('w', 's', 'a', 'd', ' ', 0, 1, 1)
         maze.InsertObject(p1, 1, 1)
-        players = [p1]
+        self.players = [p1]
         gameOver = False
         while not gameOver:
             startTime = float(time.perf_counter())
-            for player in players:
+            for player in self.players:
                 player.CheckItems()
                 deleteBombs = []
                 for bomb in player.bombs:
@@ -49,7 +42,7 @@ class Runner:
                     del player.beams[0]
                 for bomb in deleteBombs:
                     player.bombs.remove(bomb)
-                if player.IsInDamage(): 
+                if player.IsInDamage():
                     player.Flicking()
                     maze.updateGrid(player.posx, player.posy)
                     maze.updateGrid(player.posx + player.dirx, player.posy + player.diry)
