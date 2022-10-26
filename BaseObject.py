@@ -5,3 +5,5 @@ class BaseObject:
         self.foreColors = [[None for j in range(6)] for i in range(3)]
         self.isBlockPlayer = False
         self.isBlockBeam = False
+    def IsBelongTo(self, typ):
+        return typ == BaseObject

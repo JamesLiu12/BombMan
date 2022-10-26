@@ -3,11 +3,12 @@ from colorama import Fore, Back, Style
 from BaseObject import BaseObject
 
 class Bomb(BaseObject):
-    def __init__(self, posx, posy, distance, delay, setTime):
+    def __init__(self, posx, posy, distance, damage, delay, setTime):
         super().__init__()
         self.posx = posx
         self.posy = posy
         self.distance = distance
+        self.damage = damage
         self.delay = delay
         self.setTime = setTime
         self.isBlockPlayer = True
@@ -20,3 +21,5 @@ class Bomb(BaseObject):
         return float(time.perf_counter()) - self.setTime >= self.delay
     def explode(self):
         pass
+    def IsBelongTo(self, typ):
+        return typ == Bomb or super().IsBelongTo(typ)

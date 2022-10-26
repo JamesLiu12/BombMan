@@ -23,5 +23,6 @@ import os
 #     while True:
 #         print('1')
 #         time.sleep(0.1)
-from colorama import Fore, Back, Style
-print(Fore.GREEN + Back.BLACK + 'h' + Fore.RED + Back.WHITE + 'o' + Back.BLACK)
+def a():
+    return 1 or a()
+print(a())

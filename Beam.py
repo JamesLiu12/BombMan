@@ -16,3 +16,5 @@ class Beam(BaseObject):
         self.backColors = [[Back.YELLOW for j in range(6)] for i in range(3)]
     def isToDelete(self):
         return float(time.perf_counter()) - self.setTime >= self.delay
+    def IsBelongTo(self, typ):
+        return typ == Beam or super().IsBelongTo(typ)

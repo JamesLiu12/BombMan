@@ -5,6 +5,7 @@ from Maze import Maze
 import time
 
 from Player import Player
+from Wall import Wall
 
 class Runner:
     def __init__(self, fps):
@@ -12,16 +13,18 @@ class Runner:
 
     def Run(self):
         maze = Maze(14, 14)
+        maze.InsertObject(Wall(), 1, 1)
         p1 = Player('w', 's', 'a', 'd', ' ', 0, 0, 0)
         maze.InsertObject(p1, 0, 0)
         players = [p1]
         gameOver = False
         while not gameOver:
+            startTime = float(time.perf_counter())
             for player in players:
                 deleteBombs = []
                 for bomb in player.bombs:
                     if bomb.isToExplode():
-                        beam = Beam(bomb.posx, bomb.posy, bomb.distance, player.atk, float(time.perf_counter()))
+                        beam = Beam(bomb.posx, bomb.posy, bomb.distance, bomb.damage, float(time.perf_counter()))
                         player.SetBeam(beam)
                         maze.GenerateBeam(bomb.posx, bomb.posy, beam)
                         maze.DeleteObject(bomb.posx, bomb.posy, bomb)
@@ -33,9 +36,17 @@ class Runner:
                     del player.beams[0]
                 for bomb in deleteBombs:
                     player.bombs.remove(bomb)
+                if player.IsInDamage(): 
+                    player.Flicking()
+                    maze.updateGrid(player.posx, player.posy)
+                    maze.updateGrid(player.posx + player.dirx, player.posy + player.diry)
+                else: 
+                    player.returnToOrigGrid()
+                    maze.updateGrid(player.posx, player.posy)
+                    maze.updateGrid(player.posx + player.dirx, player.posy + player.diry)
                 if player.IsSetBombPress():
-                    if not maze.containType(player.posx, player.posy, Bomb):
-                        bomb = Bomb(player.posx, player.posy, player.bombDistance, player.bombDelay, float(time.perf_counter()))
+                    if not maze.IsContainType(player.posx, player.posy, Bomb):
+                        bomb = Bomb(player.posx, player.posy, player.bombDistance, player.atk, player.bombDelay, float(time.perf_counter()))
                         player.SetBomb(bomb)
                         maze.InsertObject(bomb, player.posx, player.posy)
                 if player.IsMoving():
@@ -61,4 +72,4 @@ class Runner:
                         maze.InsertObject(player, newPosx, newPosy)
             os.system('cls')
             maze.Show()
-            time.sleep(1 / self.fps)
+            time.sleep(max(0, 1 / self.fps - (float(time.perf_counter()) - startTime)))

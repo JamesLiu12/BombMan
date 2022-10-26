@@ -1,3 +1,3 @@
 from Runner import Runner
-runner = Runner(30)
+runner = Runner(20)
 runner.Run()
