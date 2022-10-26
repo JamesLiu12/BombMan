@@ -15,12 +15,32 @@ class Maze:
         self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
+        self.blockmap=[
+                        [4,4,4,4,4,4,4,4,4,4,4,4,4],
+                        [4,0,0,0,1,1,1,2,1,0,0,0,4],
+                        [4,0,4,1,4,1,4,0,4,1,4,0,4],
+                        [4,0,1,2,0,0,2,0,1,1,1,0,4],
+                        [4,1,4,0,4,2,4,2,4,1,4,1,4],
+                        [4,0,2,0,2,3,3,3,2,0,1,0,4],
+                        [4,1,4,2,4,3,4,3,4,2,4,1,4],
+                        [4,1,1,0,2,3,3,3,2,0,2,0,4],
+                        [4,1,4,0,4,2,4,2,4,1,4,1,4],
+                        [4,0,1,2,0,0,2,0,1,1,1,0,4],
+                        [4,0,4,1,4,2,4,1,4,1,4,0,4],
+                        [4,0,0,0,1,0,1,0,1,0,0,0,4],
+                        [4,4,4,4,4,4,4,4,4,4,4,4,4]
+                    ]
+        self.blocktype=[EmptySpace(),Wall(1),Wall(2),Wall(3),UnbreakWall()]
+        for i in range(self.height):
+            for j in range(self.width):
+                self.InsertObject(self.blocktype[], i, j)
+        """
         for i in range(self.height):
             self.InsertObject(UnbreakWall(), i, 0)
             self.InsertObject(UnbreakWall(), i, self.width - 1)
         for i in range(self.width):
             self.InsertObject(UnbreakWall(), 0, i)
-            self.InsertObject(UnbreakWall(), self.height - 1, i)
+            self.InsertObject(UnbreakWall(), self.height - 1, i)"""
     def Show(self):
         for i in range(self.height):
             for j in range(3):
