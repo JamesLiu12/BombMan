@@ -33,7 +33,7 @@ class Maze:
         self.blocktype=[EmptySpace(),Wall(1),Wall(2),Wall(3),UnbreakWall()]
         for i in range(self.height):
             for j in range(self.width):
-                self.InsertObject(self.blocktype[blockmap[i][j]], i, j)
+                self.InsertObject(self.blocktype[self.blockmap[i][j]], i, j)
         """
         for i in range(self.height):
             self.InsertObject(UnbreakWall(), i, 0)
