@@ -143,3 +143,6 @@ class Player(BaseObject):
                     self.ChangeSetBombTimeGap(-item.val)
         for buff in deleteList:
             self.buffs.remove(buff)
+
+    def GetBombDistance(self):
+        return self.bombDistance
