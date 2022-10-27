@@ -186,7 +186,7 @@ class Maze:
         min = 100000
         ans = []
         f = False
-        for i in range(13)
+        for i in range(13):
             for j in range(13):
                 if self.blockmap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
                     a,b = self.FindWay(posx,posy,i,j)
@@ -237,7 +237,7 @@ class Maze:
             for i in direc:
                 x1 = x + i[0]
                 y1 = y + i[1]
-                if 0 =< x1 < 13 and 0 <= y1 < 13:
+                if 0 <= x1 < 13 and 0 <= y1 < 13:
                     if a[x1][y1] == 0 and self.blockmap[x1][y1] == 0:
                         dui.append([x1,y1])
                         h[x1][y1] = (x,y)
