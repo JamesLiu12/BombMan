@@ -13,6 +13,7 @@ from UnbreakWall import UnbreakWall
 from Wall import Wall
 from random import randint
 
+from collections import deque
 class Maze:
     def __init__(self, height, width):
         self.height = height
@@ -189,6 +190,68 @@ class Maze:
                 player.GetItem(obj)
                 self.DeleteObject(posx, posy, obj)
                 return
-    def IsPosSafe(self, posx, posy):
-        #TODO
-        return True
+    # def Path(self, posx, posy):
+    #     min = 100000
+    #     ans = []
+    #     f = False
+    #     for i in range(13):
+    #         for j in range(13):
+    #             if self.blockmap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
+    #                 a,b = self.FindWay(posx,posy,i,j)
+    #                 if a<= ((player.setBombTimeGap+player.bombDelay)//Bot.speed) and a <= min and a != 0:
+    #                     min = a
+    #                     ans = b
+    #                     f = True
+    #     return f, ans
+
+    # def IfPosSafe(self, posx, posy, x, y):
+    #     if posx != x and posy != y:
+    #         return True
+    #     if posx == x:
+    #         if abs(posy-y)>player.GetBombDistance:
+    #             return True
+    #         for i in range(posy,y,abs(y-poy)//(y-posy)):
+    #             if self.IsBlockBeam(x,i):
+    #                 return True
+    #     if posy == y:
+    #         if abs(posx-x)>player.GetBombDistance:
+    #             return True
+    #         for i in range(posx,x,abs(x-pox)//(x-posx)):
+    #             if self.IsBlockBeam(i,y):
+    #                 return True
+    #     return False
+
+    # def FindWay(self, posx, posy, xx, yy):
+    #     direc = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    #     dui = deque()
+    #     dui.append([posx,posy])
+    #     path=[]
+    #     h = [[0 for i in range(13)] for j in range(13)]
+    #     a = [[0 for i in range(13)] for j in range(13)]
+    #     while dui:
+    #         b = dui.popleft()
+    #         x , y = b[0] , b[1]
+    #         if x == xx and y == yy:
+    #             x2 = xx
+    #             y2 = yy
+    #             while h[x2][y2] != (posx, posy):
+    #                 path.append((x2,y2))
+    #                 x3 = h[x2][y2][0]
+    #                 y3 = h[x2][y2][1]
+    #                 x2 ,y2 = x3, y3
+    #             path.append((x2,y2))
+    #             path.reverse()
+    #             break
+    #         for i in direc:
+    #             x1 = x + i[0]
+    #             y1 = y + i[1]
+    #             if 0 <= x1 < 13 and 0 <= y1 < 13:
+    #                 if a[x1][y1] == 0 and self.blockmap[x1][y1] == 0:
+    #                     dui.append([x1,y1])
+    #                     h[x1][y1] = (x,y)
+    #                     a[x1][y1] = a[x][y] + 1
+    #     return a[xx][yy], path
+
+
+
+
