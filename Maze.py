@@ -185,10 +185,27 @@ class Maze:
     def IsPosSafe(self, posx, posy):
         for i in range(13)
             for j in range(13):
-                if self.blockmap[x1][y1] == 0:
+                if self.blockmap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
                     a,b = self.FindWay(posx,posy,i,j)
                     if a<= 2:
                         return True, b
+    def IfPosSafe(self, posx, posy, x, y):
+        if posx != x and posy != y:
+            return True
+        if posx == x:
+            if abs(posy-y)>player.GetBombDistance:
+                return True
+            for i in range(posy,y,abs(y-poy)//(y-posy)):
+                if self.IsBlockBeam(x,i):
+                    return True
+        if posy == y:
+            if abs(posx-x)>player.GetBombDistance:
+                return True
+            for i in range(posx,x,abs(x-pox)//(x-posx)):
+                if self.IsBlockBeam(i,y):
+                    return True
+        return False
+
     def FindWay(self, posx, posy, xx, yy):
         direc = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         dui = deque()
@@ -207,6 +224,7 @@ class Maze:
                     x3 = h[x2][y2][0]
                     y3 = h[x2][y2][1]
                     x2 ,y2 = x3, y3
+                path.append((x2,y2))
                 path.reverse()
                 break
             for i in direc:
