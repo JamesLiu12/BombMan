@@ -182,13 +182,20 @@ class Maze:
                 player.GetItem(obj)
                 self.DeleteObject(posx, posy, obj)
                 return
-    def IsPosSafe(self, posx, posy):
+    def Path(self, posx, posy):
+        min = 100000
+        ans = []
+        f = False
         for i in range(13)
             for j in range(13):
                 if self.blockmap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
                     a,b = self.FindWay(posx,posy,i,j)
-                    if a<= 2:
-                        return True, b
+                    if a<= 2 and a <= min:
+                        min = a
+                        ans = b
+                        f = True
+        return f, ans
+
     def IfPosSafe(self, posx, posy, x, y):
         if posx != x and posy != y:
             return True
