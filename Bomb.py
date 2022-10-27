@@ -15,7 +15,12 @@ class Bomb(BaseObject):
         self.isBlockBeam = False
         self.priority = 2
         self.grids = [[None for j in range(6)] for i in range(3)]
-        self.grids[1][2], self.grids[1][3] = '💣', '💣'
+        self.grids[0][2]='⏜'
+        self.grids[0][5]='∗'
+        self.grids[1][0]='('
+        self.grids[1][3]=')'
+        self.grids[1][4]='╯'
+        self.grids[2][2]='⏝'
         self.backColors = [[Back.RED for j in range(6)] for i in range(3)]
     def isToExplode(self):
         return float(time.perf_counter()) - self.setTime >= self.delay
