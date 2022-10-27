@@ -196,7 +196,7 @@ class Maze:
         path=[]
         h = [[0 for i in range(13)] for j in range(13)]
         a = [[0 for i in range(13)] for j in range(13)]
-        while len(dui)>=0:
+        while dui:
             b = dui.popleft()
             x , y = b[0] , b[1]
             if x == xx and y == yy:
@@ -212,10 +212,11 @@ class Maze:
             for i in direc:
                 x1 = x + i[0]
                 y1 = y + i[1]
-                if 0 and a[x1][y1] == 0 and self.blockmap[x1][y1] == 0 =< x1 < 13 and 0 <= y1 < 13:
-                    dui.append([x1,y1])
-                    h[x1][y1] = (x,y)
-                    a[x1][y1] = a[x][y] + 1
+                if 0 =< x1 < 13 and 0 <= y1 < 13:
+                    if a[x1][y1] == 0 and self.blockmap[x1][y1] == 0:
+                        dui.append([x1,y1])
+                        h[x1][y1] = (x,y)
+                        a[x1][y1] = a[x][y] + 1
         return a[xx][yy], path
 
 
