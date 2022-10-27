@@ -190,7 +190,7 @@ class Maze:
             for j in range(13):
                 if self.blockmap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
                     a,b = self.FindWay(posx,posy,i,j)
-                    if a<= 2 and a <= min:
+                    if a<= ((player.setBombTimeGap+player.bombDelay)//1) and a <= min:
                         min = a
                         ans = b
                         f = True
