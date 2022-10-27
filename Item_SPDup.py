@@ -9,3 +9,5 @@ class Item_SPDup(Item):
         #若运行时出现字符宽度不等，去掉羽毛并将self.grids[1][0]和self.grids[1][5]改为'│' ——AA
         self.grids=[['┌','─','─','─','─','┐'],['🪶','S','P','D','↑',None],['└', '─', '─', '─', '─', '┘']]
         self.foreColors=[[Fore.LIGHTBLUE_EX for j in range(6)] for i in range(3)]
+    def IsBelongTo(self, typ):
+        return typ == Item_SPDup or super().IsBelongTo(typ)

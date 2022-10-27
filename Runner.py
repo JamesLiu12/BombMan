@@ -6,7 +6,7 @@ from Bomb import Bomb
 from Item_HPup import Item_HPup
 from Maze import Maze
 import time
-
+import keyboard
 from Player import Player
 from Wall import Wall
 
@@ -19,9 +19,11 @@ class Runner:
         maze.InsertObject(Wall(2, Item_HPup()), 2, 2)
         maze.InsertObject(Wall(2, Item_ATKup()), 4, 4)
         maze.InsertObject(Wall(2), 6, 6)
-        p1 = Player('w', 's', 'a', 'd', ' ', 0, 1, 1)
+        p1 = Player('w', 's', 'a', 'd', ' ', 1, 1, 1)
+        p2 = Player('8', '5', '4', '6', '0', 2, 1, maze.width - 2)
         maze.InsertObject(p1, 1, 1)
-        self.players = [p1]
+        maze.InsertObject(p2, 1, maze.width - 2)
+        self.players = [p1, p2]
         gameOver = False
         while not gameOver:
             startTime = float(time.perf_counter())

@@ -1,11 +1,17 @@
 from ast import Delete
 from EmptySpace import EmptySpace
 from Item import Item
+from Item_ATKup import Item_ATKup
+from Item_BombDelayDown import Item_BombDelayDown
+from Item_BombTimeGapDown import Item_BombTimeGapDown
+from Item_HPup import Item_HPup
+from Item_SPDup import Item_SPDup
 from Obstacle import Obstacle
 from Player import Player
 from colorama import Fore, Back, Style
 from UnbreakWall import UnbreakWall
 from Wall import Wall
+from random import randint
 
 class Maze:
     def __init__(self, height, width):
@@ -15,7 +21,7 @@ class Maze:
         self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
-        self.blockmap=[
+        self.blockMap=[
                         [4,4,4,4,4,4,4,4,4,4,4,4,4],
                         [4,0,0,0,1,1,1,2,1,0,0,0,4],
                         [4,0,4,1,4,1,4,0,4,1,4,0,4],
@@ -30,17 +36,18 @@ class Maze:
                         [4,0,0,0,1,0,1,0,1,0,0,0,4],
                         [4,4,4,4,4,4,4,4,4,4,4,4,4]
                     ]
-        self.blocktype=[EmptySpace(),Wall(1),Wall(2),Wall(3),UnbreakWall()]
+        itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup]
+        maxRandomNumber = 20
         for i in range(self.height):
             for j in range(self.width):
-                self.InsertObject(self.blocktype[self.blockmap[i][j]], i, j)
-        """
-        for i in range(self.height):
-            self.InsertObject(UnbreakWall(), i, 0)
-            self.InsertObject(UnbreakWall(), i, self.width - 1)
-        for i in range(self.width):
-            self.InsertObject(UnbreakWall(), 0, i)
-            self.InsertObject(UnbreakWall(), self.height - 1, i)"""
+                if self.blockMap[i][j] == 4: self.InsertObject(UnbreakWall(self.blockMap[i][j]), i, j)
+                elif self.blockMap[i][j] != 0:
+                    randomNumber = randint(0, maxRandomNumber)
+                    if randomNumber >= len(itemList):
+                        self.InsertObject(Wall(self.blockMap[i][j]), i, j)
+                    else:
+                        self.InsertObject(Wall(self.blockMap[i][j], itemList[randomNumber]()), i, j)
+
     def Show(self):
         for i in range(self.height):
             for j in range(3):
