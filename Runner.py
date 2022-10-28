@@ -15,7 +15,7 @@ class Runner:
         self.fps = fps
         self.players = []
     def Run(self):
-        maze = Maze(13, 13)
+        maze = Maze(13, 13, 1)
         maze.InsertObject(Wall(2, Item_HPup()), 2, 2)
         maze.InsertObject(Wall(2, Item_ATKup()), 4, 4)
         maze.InsertObject(Wall(2), 6, 6)

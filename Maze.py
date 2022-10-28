@@ -16,15 +16,16 @@ from Bot import Bot
 from collections import deque
 
 class Maze:
-    def __init__(self, height, width):
+    def __init__(self, height, width, mapnum):
         self.height = height
         self.width = width
         self.objectLists = [[[EmptySpace()] for j in range(width)] for i in range(height)]
         self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
         self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
+        self.mapnumber=mapnum
         self.blockMap=[
-                        [4,4,4,4,4,4,4,4,4,4,4,4,4],
+                        [[4,4,4,4,4,4,4,4,4,4,4,4,4],
                         [4,0,0,0,1,1,1,2,1,0,0,0,4],
                         [4,0,4,1,4,1,4,0,4,1,4,0,4],
                         [4,0,1,2,0,0,2,0,1,1,1,0,4],
@@ -36,19 +37,34 @@ class Maze:
                         [4,0,1,2,0,0,2,0,1,1,1,0,4],
                         [4,0,4,1,4,2,4,1,4,1,4,0,4],
                         [4,0,0,0,1,0,1,0,1,0,0,0,4],
-                        [4,4,4,4,4,4,4,4,4,4,4,4,4]
+                        [4,4,4,4,4,4,4,4,4,4,4,4,4]],
+                        [[4,4,4,4,4,4,4,4,4,4,4,4,4],
+                        [4,0,0,0,1,0,4,0,1,0,0,0,4],
+                        [4,0,0,4,0,1,0,1,0,4,0,0,4],
+                        [4,0,4,0,1,4,1,4,0,1,4,0,4],
+                        [4,1,0,1,1,3,2,3,1,0,1,1,4],
+                        [4,0,1,1,4,2,4,2,4,1,1,0,4],
+                        [4,0,4,3,2,3,3,3,2,3,4,0,4],
+                        [4,1,0,1,4,2,4,2,4,1,0,1,4],
+                        [4,1,1,0,1,3,2,3,1,1,1,1,4],
+                        [4,0,4,1,0,4,1,4,1,0,4,0,4],
+                        [4,0,0,4,1,1,0,1,0,4,0,0,4],
+                        [4,0,0,0,1,0,4,0,1,0,0,0,4],
+                        [4,4,4,4,4,4,4,4,4,4,4,4,4]]
                     ]
         itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup]
-        maxRandomNumber = 20
+        maxRandomNumber = 10
         for i in range(self.height):
             for j in range(self.width):
-                if self.blockMap[i][j] == 4: self.InsertObject(UnbreakWall(self.blockMap[i][j]), i, j)
-                elif self.blockMap[i][j] != 0:
+                if self.blockMap[self.mapnumber][i][j] == 4: 
+                    tempobject=UnbreakWall()
+                    self.InsertObject(UnbreakWall(self.blockMap[self.mapnumber][i][j]), i, j)
+                elif self.blockMap[self.mapnumber][i][j] != 0:
                     randomNumber = randint(0, maxRandomNumber)
                     if randomNumber >= len(itemList):
-                        self.InsertObject(Wall(self.blockMap[i][j]), i, j)
+                        self.InsertObject(Wall(self.blockMap[self.mapnumber][i][j]), i, j)
                     else:
-                        self.InsertObject(Wall(self.blockMap[i][j], itemList[randomNumber]()), i, j)
+                        self.InsertObject(Wall(self.blockMap[self.mapnumber][i][j], itemList[randomNumber]()), i, j)
 
     def Show(self):
         for i in range(self.height):
