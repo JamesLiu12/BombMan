@@ -8,7 +8,7 @@ class Item_BombTimeGapDown(Item):
         self.delay = 10
         self.grids=[
                     ['┌','─','─','─','─','┐'],
-                    [None, '💣','⏲','↓',None,None],
+                    ['💣','⏲',None, '↓',None,None],
                     ['└', '─', '─', '─', '─', '┘']
                     ]
         self.foreColors=[[Fore.LIGHTYELLOW_EX for j in range(6)] for i in range(3)]

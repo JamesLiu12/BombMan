@@ -1,8 +1,6 @@
 from Item import Item
 from colorama import Fore, Back, Style
 
-
-
 class Item_BombDelayDown(Item):
     def __init__(self):
         super().__init__()
