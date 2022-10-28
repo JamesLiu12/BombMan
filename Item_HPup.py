@@ -9,6 +9,5 @@ class Item_HPup(Item):
         self.foreColors = [[Fore.LIGHTRED_EX for j in range(6)] for i in range(3)]
         self.val = 1
         self.delay = None
-        self.priority = 4
     def IsBelongTo(self, typ):
         return typ == Item_HPup or super().IsBelongTo(typ)

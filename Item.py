@@ -6,5 +6,6 @@ class Item(BaseObject):
         super().__init__()
         self.val = None
         self.delay = None
+        self.priority = 4
     def IsBelongTo(self, typ):
         return typ == Item or super().IsBelongTo(typ)
