@@ -36,8 +36,16 @@ class Storemap:
 		f = open('yourmap.txt',mode='r')
 		lines = f.readlines()
 		print(lines)
-		if (len(lines)!=width-2):
-			return [[0 for j in range(width-2)] for i in range(height-2)]
+		if (len(lines)!=height-2 or len(lines[0].split())!=width-2):
+			print("Invalid map Input")
+			map=[[0 for j in range(width)] for i in range(height)]
+			for i in range(height):
+				map[i][0]=4
+				map[i][width-1]=4
+			for i in range(width):
+				map[0][i]=4
+				map[height-1][i]=4
+			return map
 		map=[[0 for j in range(width)] for i in range(height)]
 		for i in range(height):
 			map[i][0]=4
