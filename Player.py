@@ -146,3 +146,9 @@ class Player(BaseObject):
 
     def GetBombDistance(self):
         return self.bombDistance
+
+    def getspeed(self):
+        return self.speed
+
+    def GetBombtime(self):
+        return self.bombDelay
