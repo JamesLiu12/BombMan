@@ -20,7 +20,7 @@ class Runner:
         maze.InsertObject(Wall(2, Item_ATKup()), 4, 4)
         maze.InsertObject(Wall(2), 6, 6)
         p1 = Player('w', 's', 'a', 'd', ' ', 1, 1, 1)
-        p2 = Player('8', '5', '4', '6', '0', 2, 1, maze.width - 2)
+        p2 = Player(keyboard.KEY_UP, keyboard.KEY_DOWN, '4', '6', '0', 2, 1, maze.width - 2)
         maze.InsertObject(p1, 1, 1)
         maze.InsertObject(p2, 1, maze.width - 2)
         self.players = [p1, p2]
@@ -53,7 +53,7 @@ class Runner:
                     maze.updateGrid(player.posx, player.posy)
                     maze.updateGrid(player.posx + player.dirx, player.posy + player.diry)
                 if player.IsSetBombPress():
-                    if not maze.IsContainType(player.posx, player.posy, Bomb):
+                    if not maze.IsContainType(player.posx, player.posy, Bomb) and not player.IsDead() and not player.IsInDamage():
                         bomb = Bomb(player.posx, player.posy, player.bombDistance, player.atk, player.bombDelay, float(time.perf_counter()))
                         player.SetBomb(bomb)
                         maze.InsertObject(bomb, player.posx, player.posy)
@@ -61,7 +61,6 @@ class Runner:
                     newPosx, newPosy = player.posx + player.dirx, player.posy + player.diry
                     if not player.IsCanMove(axis = 0 if dirx != 0 else 1): continue
                     player.Move()
-                    maze.PeakUpItem(newPosx, newPosy, player)
                     if player.IsEndMove():
                         maze.DeleteObject(player.posx, player.posy, player)
                         player.InitParts()
@@ -79,6 +78,7 @@ class Runner:
                         if maze.IsBolckPlayer(newPosx, newPosy): continue
                         player.StartMove(dirx, diry)
                         maze.InsertObject(player, newPosx, newPosy)
+                        maze.PeakUpItem(newPosx, newPosy, player)
             os.system('cls')
             maze.Show()
             time.sleep(max(0, 1 / self.fps - (float(time.perf_counter()) - startTime)))

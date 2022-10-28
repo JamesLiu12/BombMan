@@ -3,6 +3,7 @@ from EmptySpace import EmptySpace
 from Item import Item
 from Item_ATKup import Item_ATKup
 from Item_BombDelayDown import Item_BombDelayDown
+from Item_BombDistanceUp import Item_BombDistanceUp
 from Item_BombTimeGapDown import Item_BombTimeGapDown
 from Item_HPup import Item_HPup
 from Item_SPDup import Item_SPDup
@@ -42,7 +43,6 @@ class Maze:
 						self.InsertObject(Wall(self.blockMap[i][j]), i, j)
 					else:
 						self.InsertObject(Wall(self.blockMap[i][j], itemList[randomNumber]()), i, j)
-
 	def Show(self):
 		for i in range(self.height):
 			for j in range(3):

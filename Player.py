@@ -5,6 +5,7 @@ from colorama import Fore, Back, Style
 from Item_ATKup import Item_ATKup
 from BaseObject import BaseObject
 from Item_BombDelayDown import Item_BombDelayDown
+from Item_BombDistanceUp import Item_BombDistanceUp
 from Item_BombTimeGapDown import Item_BombTimeGapDown
 from Item_HPup import Item_HPup
 from Item_SPDup import Item_SPDup
@@ -100,6 +101,8 @@ class Player(BaseObject):
         self.bombDelay += x
     def ChangeSetBombTimeGap(self, x):
         self.setBombTimeGap += x
+    def ChangeBombDistance(self, x):
+        self.bombDistance += x
     def GetTimeGap(self, axis):
         return 1 / self.speed / (3 if axis == 0 else 6)
     def IsCanMove(self, axis):
@@ -126,7 +129,8 @@ class Player(BaseObject):
             self.ChangeBombDelay(item.val)
         elif item.IsBelongTo(Item_BombTimeGapDown):
             self.ChangeSetBombTimeGap(item.val)
-        
+        elif item.IsBelongTo(Item_BombDistanceUp):
+            self.ChangeBombDistance(item.val)
     def CheckItems(self):
         deleteList = []
         for buff in self.buffs:
@@ -141,6 +145,8 @@ class Player(BaseObject):
                     self.ChangeBombDelay(-item.val)
                 elif item.IsBelongTo(Item_BombTimeGapDown):
                     self.ChangeSetBombTimeGap(-item.val)
+                elif item.IsBelongTo(Item_BombDistanceUp):
+                    self.ChangeBombDistance(item.val)
         for buff in deleteList:
             self.buffs.remove(buff)
 
