@@ -8,9 +8,9 @@ class Item_BombTimeGapDown(Item):
         self.delay = 10
         self.grids=[
                     ['┌','─','─','─','─','┐'],
-                    ['💣','⏲',None, '↓',None,None],
+                    [None,'⏲','C','D','↓',''],
                     ['└', '─', '─', '─', '─', '┘']
                     ]
-        self.foreColors=[[Fore.LIGHTYELLOW_EX for j in range(6)] for i in range(3)]
+        self.foreColors=[[Fore.LIGHTGREEN_EX for j in range(6)] for i in range(3)]
     def IsBelongTo(self, typ):
         return typ == Item_BombTimeGapDown or super().IsBelongTo(typ)

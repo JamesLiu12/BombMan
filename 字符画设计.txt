@@ -116,11 +116,13 @@ self.grids[2][2]=' ⏝'
   ⏜  ∗
 (  )╯
   ⏝
-
+ ︵ ∗
+(  )╯
+ ︶
 
  ︶︵｜︶⟯⟮⁽⁾⁀⁔‿⁐ŏ₊∗︵︶
 (‾◡◝)
-
+︵︶
 BOT
 [
 [None,'\\','~','/',None,None],
@@ -138,7 +140,7 @@ BOT
 [
 ['┌','─','─','─','─','┐'],
 ['🪶','S','P','D','↑',None],
-['└,'─','─','─','─','┘']
+['└', '─', '─', '─', '─', '┘']
 ]
 
 ┌────┐
@@ -148,7 +150,7 @@ BOT
 [
 ['┌','─','─','─','─','┐'],
 ['⚔','A','T','K','↑',None],
-['└,'─','─','─','─','┘']
+['└', '─', '─', '─', '─', '┘']
 ]
 
 ┌────┐
@@ -159,7 +161,7 @@ BOT
 [
 ['┌','─','─','─','─','┐'],
 [None,'⏲','C','D','↓',None],
-['└,'─','─','─','─','┘']
+['└', '─', '─', '─', '─', '┘']
 ]
 ┌────┐
 ⏲CD↓
@@ -168,21 +170,36 @@ BOT
 [
 ['┌','─','─','─','─','┐'],
 [None, '💣','⏲','↓',None,None],
-['└,'─','─','─','─','┘']
+['└', '─', '─', '─', '─', '┘']
 ]
 ┌────┐
 💣⏲↓
 └────┘
 
+爆炸范围提升
+
+[
+['┌','─','─','─','─','┐'],
+['💣','🔥',None,'↑',None,None],
+['└', '─', '─', '─', '─', '┘']
+]
+
+┌────┐
+🔥AREA↑
+└────┘
+
+
+
 增加血量 Fore.LIGHTRED_EX
 [
 ['┌','─','─','─','─','┐'],
 [None, '❤','H','P','↗',None],
-['└,'─','─','─','─','┘']
+['└', '─', '─', '─', '─', '┘']
 ]
 ┌────┐
 ❤HP↗
 └────┘
+
 
 
 13*13 MAP
@@ -204,8 +221,7 @@ MAP1:
 ]
 
 MAP2:
-[
-[4,4,4,4,4,4,4,4,4,4,4,4,4],
+[[4,4,4,4,4,4,4,4,4,4,4,4,4],
 [4,1,0,0,1,0,4,0,1,0,0,1,4],
 [4,0,0,4,0,1,0,1,0,4,0,0,4],
 [4,0,4,0,1,4,1,4,0,1,4,0,4],
@@ -217,5 +233,33 @@ MAP2:
 [4,0,4,1,0,4,1,4,1,0,4,0,4],
 [4,0,0,4,1,1,0,1,0,4,0,0,4],
 [4,0,0,0,1,0,4,0,1,0,0,0,4],
-[4,4,4,4,4,4,4,4,4,4,4,4,4]
-]
+[4,4,4,4,4,4,4,4,4,4,4,4,4]]
+
+Clock face symbols
+1F550 🕐 CLOCK FACE ONE OCLOCK
+→ 231A ⌚  watch
+→ 23F0 ⏰  alarm clock
+1F551 🕑 CLOCK FACE TWO OCLOCK
+1F552 🕒 CLOCK FACE THREE OCLOCK
+1F553 🕓 CLOCK FACE FOUR OCLOCK
+1F554 🕔 CLOCK FACE FIVE OCLOCK
+1F555 🕕 CLOCK FACE SIX OCLOCK
+1F556 🕖 CLOCK FACE SEVEN OCLOCK
+1F557 🕗 CLOCK FACE EIGHT OCLOCK
+1F558 🕘 CLOCK FACE NINE OCLOCK
+1F559 🕙 CLOCK FACE TEN OCLOCK
+1F55A 🕚 CLOCK FACE ELEVEN OCLOCK
+1F55B 🕛 CLOCK FACE TWELVE OCLOCK
+1F55C 🕜 CLOCK FACE ONE-THIRTY
+1F55D 🕝 CLOCK FACE TWO-THIRTY
+1F55E 🕞 CLOCK FACE THREE-THIRTY
+1F55F 🕟 CLOCK FACE FOUR-THIRTY
+1F560 🕠 CLOCK FACE FIVE-THIRTY
+1F561 🕡 CLOCK FACE SIX-THIRTY
+1F562 🕢 CLOCK FACE SEVEN-THIRTY
+1F563 🕣 CLOCK FACE EIGHT-THIRTY
+1F564 🕤 CLOCK FACE NINE-THIRTY
+1F565 🕥 CLOCK FACE TEN-THIRTY
+1F566 🕦 CLOCK FACE ELEVEN-THIRTY
+1F567 🕧 CLOCK FACE TWELVE-THIRTY
+Communication symb

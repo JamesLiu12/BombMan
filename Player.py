@@ -47,7 +47,8 @@ class Player(BaseObject):
         self.flickGids = [[None for j in range(6)] for i in range(3)]
         self.origGrids = [['_', '_', '⁔', '_', '_', None], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, "\\", None]]
         self.grids = self.origGrids
-        self.foreColors = [[Fore.WHITE for j in range(6)] for i in range(3)]
+        self.colorboard=[Fore.CYAN,Fore.LIGHTMAGENTA_EX]
+        self.foreColors = [[self.colorboard[self.id-1] for j in range(6)] for i in range(3)]
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
