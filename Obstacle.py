@@ -2,8 +2,8 @@ from BaseObject import BaseObject
 from colorama import Fore, Back, Style
 
 class Obstacle(BaseObject):
-    def __init__(self, item = None):
-        super().__init__()
+    def __init__(self, maze, item = None):
+        super().__init__(maze)
         self.HP = None
         self.isBlockPlayer = True
         self.isBlockBeam = True

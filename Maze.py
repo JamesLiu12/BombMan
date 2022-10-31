@@ -21,7 +21,7 @@ class Maze:
 	def __init__(self, height, width, mapnum):
 		self.height = height
 		self.width = width
-		self.objectLists = [[[EmptySpace()] for j in range(width)] for i in range(height)]
+		self.objectLists = [[[EmptySpace(self)] for j in range(width)] for i in range(height)]
 		self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
 		self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
 		self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
@@ -35,14 +35,13 @@ class Maze:
 		for i in range(self.height):
 			for j in range(self.width):
 				if self.blockMap[i][j] == 4: 
-					tempobject=UnbreakWall()
-					self.InsertObject(UnbreakWall(self.blockMap[i][j]), i, j)
+					self.InsertObject(UnbreakWall(self, self.blockMap[i][j]), i, j)
 				elif self.blockMap[i][j] != 0:
 					randomNumber = randint(0, maxRandomNumber)
 					if randomNumber >= len(itemList):
-						self.InsertObject(Wall(self.blockMap[i][j]), i, j)
+						self.InsertObject(Wall(self, self.blockMap[i][j]), i, j)
 					else:
-						self.InsertObject(Wall(self.blockMap[i][j], itemList[randomNumber]()), i, j)
+						self.InsertObject(Wall(self, self.blockMap[i][j], itemList[randomNumber](self)), i, j)
 	def Show(self):
 		for i in range(self.height):
 			for j in range(3):
@@ -127,6 +126,11 @@ class Maze:
 						if obj.grids[i][j] != None: self.grids[posx][posy][i][j] = obj.grids[i][j]
 						if obj.backColors[i][j] != None: self.backColors[posx][posy][i][j] = obj.backColors[i][j]
 						if obj.foreColors[i][j] != None: self.foreColors[posx][posy][i][j] = obj.foreColors[i][j]
+			
+
+	def IsOutOfRange(self, posx, posy):
+		return posx < 0 or posx >= self.height or posy < 0 or posy >= self.width
+	
 	def IsBolckPlayer(self, posx, posy):
 		for obj in self.objectLists[posx][posy]:
 			if obj.isBlockPlayer: return True
@@ -135,6 +139,12 @@ class Maze:
 		for obj in self.objectLists[posx][posy]:
 			if obj.isBlockBeam: return True
 		return False
+
+	def IsContainType(self, posx, posy, typ):
+		for obj in self.objectLists[posx][posy]:
+			if obj.IsBelongTo(typ): return True
+		return False
+
 	def BeamEffect(self, posx, posy, damage):
 		deadList = []
 		for obj in self.objectLists[posx][posy]:
@@ -148,42 +158,7 @@ class Maze:
 			elif obj.IsBelongTo(Player):
 				if obj.IsMoving(): self.DeleteObject(posx + obj.dirx, posy + obj.diry, obj)
 			self.DeleteObject(posx, posy, obj)
-			
-	def GenerateBeam(self, posx, posy, beam):
-		self.InsertObject(beam, posx, posy)
-		self.BeamEffect(posx, posy, beam.damage)
-		dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-		for dirx, diry in dir:
-			for i in range(1, beam.distance):
-				newPosx = posx + dirx * i
-				newPosy = posy + diry * i
-				if self.IsOutOfRange(newPosx, newPosy): break
-				isBlock = False
-				if self.IsBlockBeam(newPosx, newPosy): isBlock = True
-				self.BeamEffect(newPosx, newPosy, beam.damage)
-				self.InsertObject(beam, newPosx, newPosy)
-				if isBlock: break
-	def IsOutOfRange(self, posx, posy):
-		return posx < 0 or posx >= self.height or posy < 0 or posy >= self.width
-	def DestroyBeam(self, posx, posy, beam):
-		self.DeleteObject(posx, posy, beam)
-		dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-		for dirx, diry in dir:
-			for i in range(1, beam.distance):
-				newPosx = posx + dirx * i
-				newPosy = posy + diry * i
-				if self.IsOutOfRange(newPosx, newPosy): break
-				self.DeleteObject(newPosx, newPosy, beam)
-	def IsContainType(self, posx, posy, typ):
-		for obj in self.objectLists[posx][posy]:
-			if obj.IsBelongTo(typ): return True
-		return False
-	def PeakUpItem(self, posx, posy, player):
-		for obj in self.objectLists[posx][posy]:
-			if obj.IsBelongTo(Item):
-				player.GetItem(obj)
-				self.DeleteObject(posx, posy, obj)
-				return
+
 	def Path(self, posx, posy):
 		min = 100000
 		ans = []

@@ -23,11 +23,11 @@ import os
 #     while True:
 #         print('1')
 #         time.sleep(0.1)
-class A():
+class A:
     def __init__(self) -> None:
-        pass
-b = (0, A())
-l = [b]
-for x in l:
-    print(id(x))
-print(id(l[0]))
+        self.b = B(self)
+class B:
+    def __init__(self, a) -> None:
+        self.a = a
+a = A()
+print(id(a.b))

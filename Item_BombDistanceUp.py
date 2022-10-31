@@ -1,8 +1,8 @@
 from Item import Item
 from colorama import Fore, Back, Style
 class Item_BombDistanceUp(Item):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, maze):
+        super().__init__(maze)
         self.val = 1
         self.delay = 10
         self.grids = [['┌','─','─','─','─','┐'],['🔥','🔥',None,'↑','',''],['└', '─', '─', '─', '─', '┘']]
