@@ -7,6 +7,7 @@ class Obstacle(BaseObject):
         self.HP = None
         self.isBlockPlayer = True
         self.isBlockBeam = True
+        self.deadScore = 1
         self.priority = 5
         self.item = item
         self.foreColors = [[Fore.WHITE for j in range(6)] for i in range(3)]
@@ -18,3 +19,6 @@ class Obstacle(BaseObject):
 
     def IsBelongTo(self, typ):
         return typ == Obstacle or super().IsBelongTo(typ)
+    
+    def GetDeadScore(self):
+        return self.deadScore

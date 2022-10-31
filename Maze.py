@@ -16,7 +16,7 @@ from random import randint
 from Bot import Bot
 from collections import deque
 from Storemap import Storemap
-
+from colorama import Fore, Back, Style
 class Maze:
 	def __init__(self, height, width, mapnum):
 		self.height = height
@@ -145,18 +145,20 @@ class Maze:
 			if obj.IsBelongTo(typ): return True
 		return False
 
-	def BeamEffect(self, posx, posy, damage):
+	def BeamEffect(self, posx, posy, beam):
 		deadList = []
 		for obj in self.objectLists[posx][posy]:
 			if obj.IsBelongTo(Obstacle) or obj.IsBelongTo(Player):
-				obj.ChangeHP(-damage)
+				obj.ChangeHP(-beam.damage)
 				if obj.IsDead(): deadList.append(obj)
 		for obj in deadList:
 			if obj.IsBelongTo(Obstacle):
 				if obj.item != None:
 					self.InsertObject(obj.item, posx, posy)
+					beam.setBy.ChangeScore(obj.GetDeadScore())
 			elif obj.IsBelongTo(Player):
 				if obj.IsMoving(): self.DeleteObject(posx + obj.dirx, posy + obj.diry, obj)
+				beam.setBy.ChangeScore(obj.GetDeadScore() if obj != beam.setBy else -obj.GetDeadScore())
 			self.DeleteObject(posx, posy, obj)
 
 	def Path(self, posx, posy):

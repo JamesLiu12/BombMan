@@ -1,4 +1,4 @@
-from UI import *
+from SelectUI import *
 class GameEndUI():
     def __init__(self) -> None:
         GameEndUI.quit = UI()

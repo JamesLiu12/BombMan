@@ -3,7 +3,7 @@ from BaseObject import BaseObject
 from colorama import Fore, Back, Style
 import time
 class Beam(BaseObject):
-    def __init__(self, maze, centerPosx, centerPosy, distance, damage, setTime):
+    def __init__(self, maze, centerPosx, centerPosy, distance, damage, setTime, setBy):
         super().__init__(maze)
         self.isBlockPlayer = False
         self.isBlockBeam = False
@@ -12,6 +12,7 @@ class Beam(BaseObject):
         self.distance = distance
         self.damage = damage
         self.setTime = setTime
+        self.setBy = setBy
         self.priority = 3
         self.backColors = [[Back.YELLOW for j in range(6)] for i in range(3)]
     def IsToDelete(self):

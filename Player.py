@@ -49,8 +49,10 @@ class Player(BaseObject):
         self.flickGids = [[None for j in range(6)] for i in range(3)]
         self.origGrids = [['_', '_', '⁔', '_', '_', None], ['(', '≧', '▽', '≦', ')', 'o'], [None, '/', None, None, "\\", None]]
         self.grids = self.origGrids
-        self.colorboard=[Fore.CYAN,Fore.LIGHTMAGENTA_EX]
+        self.colorboard=[Fore.CYAN,Fore.LIGHTMAGENTA_EX,Fore.CYAN,Fore.LIGHTMAGENTA_EX]
         self.foreColors = [[self.colorboard[self.id-1] for j in range(6)] for i in range(3)]
+        self.deadScore = 10
+        self.score = 0
     def IsMoving(self):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
@@ -112,8 +114,14 @@ class Player(BaseObject):
         self.setBombTimeGap += x
     def ChangeBombDistance(self, x):
         self.bombDistance += x
+    def ChangeScore(self, x):
+        self.score += x
     def GetTimeGap(self, axis):
         return 1 / self.speed / (3 if axis == 0 else 6)
+    def GetDeadScore(self):
+        return self.deadScore
+    def GetScore(self):
+        return self.score
     def IsCanMove(self, axis):
         return float(time.perf_counter()) - self.preMoveTime >= self.GetTimeGap(axis) and not self.IsDead()
     def InitParts(self):

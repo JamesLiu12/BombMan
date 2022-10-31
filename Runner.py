@@ -9,20 +9,32 @@ import time
 import keyboard
 from Player import Player
 from Wall import Wall
+from colorama import Fore, Back, Style
 
 class Runner:
-    def __init__(self, fps):
+    def __init__(self, fps, playerType1, playerType2, botType3, botType4):
         self.fps = fps
         self.players = []
+        self.maze = Maze(13, 13, 1)
+        if playerType1 == Player: self.players.append(Player(self.maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1))
+        if playerType2 == Player: self.players.append(Player(self.maze, keyboard.KEY_UP, keyboard.KEY_DOWN, '4', '6', '0', 2, 1, self.maze.width - 2))
+        if botType3 == Bot: self.players.append(Bot(self.maze, 3, self.maze.height - 2, 1))
+        if botType4 == Bot: self.players.append(Bot(self.maze, 4, self.maze.height - 2, self.maze.width - 2))
+        for player in self.players:
+            self.maze.InsertObject(player, player.posx, player.posy)
+    def ShowScores(self):
+        print(Fore.WHITE + 'Score: ')
+        for player in self.players:
+            name = 'Bot' if player.IsBelongTo(Bot) else 'Player'
+            print(Fore.WHITE + f'{name} {player.id}: {player.GetScore()}', end = '')
+            print()
+    def GameOver(self):
+        cnt = 0
+        for player in self.players:
+            if not player.IsDead(): cnt += 1
+        return cnt <= 1
     def Run(self):
-        maze = Maze(13, 13, 1)
-        p1 = Player(maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1)
-        p2 = Player(maze, keyboard.KEY_UP, keyboard.KEY_DOWN, '4', '6', '0', 2, 1, maze.width - 2)
-        maze.InsertObject(p1, 1, 1)
-        maze.InsertObject(p2, 1, maze.width - 2)
-        self.players = [p1, p2]
-        gameOver = False
-        while not gameOver:
+        while not self.GameOver():
             startTime = float(time.perf_counter())
             for player in self.players:
                 player.CheckItems()
@@ -30,7 +42,7 @@ class Runner:
                 for bomb in player.bombs:
                     if bomb.isToExplode():
                         bomb.GenerateBeam(bomb.posx, bomb.posy)
-                        maze.DeleteObject(bomb.posx, bomb.posy, bomb)
+                        self.maze.DeleteObject(bomb.posx, bomb.posy, bomb)
                         deleteBombs.append(bomb)
                 while len(player.beams):
                     beam = player.beams[0]
@@ -43,31 +55,35 @@ class Runner:
                     player.Flicking()
                 else: 
                     player.returnToOrigGrid()
-                if player.IsSetBombPress():
-                    if not maze.IsContainType(player.posx, player.posy, Bomb) and not player.IsDead() and not player.IsInDamage():
-                        player.SetBomb()
+                if not player.IsBelongTo(Bot):
+                    if player.IsSetBombPress():
+                        if not self.maze.IsContainType(player.posx, player.posy, Bomb) and not player.IsDead() and not player.IsInDamage():
+                            player.SetBomb()
                 if player.IsMoving():
                     newPosx, newPosy = player.posx + player.dirx, player.posy + player.diry
                     if not player.IsCanMove(axis = 0 if dirx != 0 else 1): continue
                     player.Move()
                     if player.IsEndMove():
-                        maze.DeleteObject(player.posx, player.posy, player)
+                        self.maze.DeleteObject(player.posx, player.posy, player)
                         player.InitParts()
                         player.SetPos(newPosx, newPosy)
                         player.InitDir()
                     else:
-                        maze.updateGrid(newPosx, newPosy)
-                    maze.updateGrid(player.posx, player.posy)
-                else:
+                        self.maze.updateGrid(newPosx, newPosy)
+                    self.maze.updateGrid(player.posx, player.posy)
+                elif not player.IsBelongTo(Bot):
                     dirx, diry = player.GetMoveDir()
                     if dirx == 0 and diry == 0: continue
                     else:
                         newPosx = player.posx + dirx
                         newPosy = player.posy + diry
-                        if maze.IsBolckPlayer(newPosx, newPosy): continue
+                        if self.maze.IsBolckPlayer(newPosx, newPosy): continue
                         player.StartMove(dirx, diry)
-                        maze.InsertObject(player, newPosx, newPosy)
+                        self.maze.InsertObject(player, newPosx, newPosy)
                         player.PeakUpItem(newPosx, newPosy)
+                else:
+                    pass
             os.system('cls')
-            maze.Show()
+            self.maze.Show()
+            self.ShowScores()
             time.sleep(max(0, 1 / self.fps - (float(time.perf_counter()) - startTime)))

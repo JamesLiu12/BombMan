@@ -31,10 +31,10 @@ class Bomb(BaseObject):
     def IsBelongTo(self, typ):
         return typ == Bomb or super().IsBelongTo(typ)
     def GenerateBeam(self, posx, posy):
-        beam = Beam(self.maze, posx, posy, self.distance, self.damage, time.perf_counter())
+        beam = Beam(self.maze, posx, posy, self.distance, self.damage, time.perf_counter(), self.setBy)
         self.setBy.SetBeam(beam)
         self.maze.InsertObject(beam, posx, posy)
-        self.maze.BeamEffect(posx, posy, beam.damage)
+        self.maze.BeamEffect(posx, posy, beam)
         dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
         for dirx, diry in dir:
             for i in range(1, beam.distance):
@@ -43,6 +43,6 @@ class Bomb(BaseObject):
                 if self.maze.IsOutOfRange(newPosx, newPosy): break
                 isBlock = False
                 if self.maze.IsBlockBeam(newPosx, newPosy): isBlock = True
-                self.maze.BeamEffect(newPosx, newPosy, beam.damage)
+                self.maze.BeamEffect(newPosx, newPosy, beam)
                 self.maze.InsertObject(beam, newPosx, newPosy)
                 if isBlock: break

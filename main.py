@@ -1,3 +1,3 @@
-from Runner import Runner
-runner = Runner(40)
-runner.Run()
+from GameStartUI import GameStartUI
+gameStartUI = GameStartUI()
+gameStartUI.ShowMenu()

@@ -4,20 +4,21 @@ if platform.system() == 'Windows':
     from pynput.keyboard import Key,Listener
 
     from pynput import keyboard
-    class UI():
+    class SelectUI():
         def __init__(self):
             self.dir_ = None   
         def getdir(self):
             
             def on_press(Key):
-                if Key.char=='w':self.dir_ = 1
-                elif Key.char=='s':self.dir_ = -1
-                elif Key.char=='a':self.dir_ = -1
-                elif Key.char=='d':self.dir_ = 1
-                elif Key.char=='q': self.dir_ = 2
-                elif Key.char == 'e':self.dir_ = 3
-                else:
-                    print('fuck you')
+                try:
+                    if Key.char=='w':self.dir_ = -1
+                    elif Key.char=='s':self.dir_ = 1
+                    elif Key.char=='a':self.dir_ = -1
+                    elif Key.char=='d':self.dir_ = 1
+                    elif Key.char=='q': self.dir_ = 2
+                    elif Key.char == 'e':self.dir_ = 3
+                except:
+                    pass
             
                 return False
             with keyboard.Listener(on_press=on_press) as listener:
