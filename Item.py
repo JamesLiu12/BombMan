@@ -2,8 +2,8 @@ from BaseObject import BaseObject
 
 
 class Item(BaseObject):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, maze):
+        super().__init__(maze)
         self.val = None
         self.delay = None
         self.priority = 4

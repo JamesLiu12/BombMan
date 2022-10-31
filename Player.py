@@ -9,9 +9,11 @@ from Item_BombDistanceUp import Item_BombDistanceUp
 from Item_BombTimeGapDown import Item_BombTimeGapDown
 from Item_HPup import Item_HPup
 from Item_SPDup import Item_SPDup
+from Item import Item
+from Bomb import Bomb
 class Player(BaseObject):
-    def __init__(self, key_up, key_down, key_left, key_right, key_setBomb, id, posx, posy, HP = 3, speed = 4, bombDelay = 2):
-        super().__init__()
+    def __init__(self, maze, key_up, key_down, key_left, key_right, key_setBomb, id, posx, posy, HP = 3, speed = 4, bombDelay = 2):
+        super().__init__(maze)
         self.HP = HP
         self.speed = speed
         self.key_up = key_up
@@ -65,9 +67,11 @@ class Player(BaseObject):
     def IsSetBombPress(self):
         if float(time.perf_counter()) - self.preSetBombTime < self.setBombTimeGap: return False
         return keyboard.is_pressed(self.key_setBomb)
-    def SetBomb(self, bomb):
+    def SetBomb(self):
+        bomb = Bomb(self.maze, self, self.posx, self.posy, self.bombDistance, self.atk, self.bombDelay, float(time.perf_counter()))
         self.bombs.append(bomb)
         self.preSetBombTime = float(time.perf_counter())
+        self.maze.InsertObject(bomb, self.posx, self.posy)
     def SetBeam(self, beam):
         self.beams.append(beam)
     def Move(self):
@@ -86,8 +90,12 @@ class Player(BaseObject):
     def Flicking(self):
         if float(time.perf_counter()) - self.preFlickTime >= self.flickTimeGap:
             self.grids = self.origGrids if self.grids == self.flickGids else self.flickGids
+            self.maze.updateGrid(self.posx, self.posy)
+            self.maze.updateGrid(self.posx + self.dirx, self.posy + self.diry)
     def returnToOrigGrid(self):
         self.grids = self.origGrids
+        self.maze.updateGrid(self.posx, self.posy)
+        self.maze.updateGrid(self.posx + self.dirx, self.posy + self.diry)
     def ChangeHP(self, x): 
         if x < 0:
             if self.IsInDamage(): return
@@ -158,3 +166,10 @@ class Player(BaseObject):
 
     def GetBombtime(self):
         return self.bombDelay
+        
+    def PeakUpItem(self, posx, posy):
+        for obj in self.maze.objectLists[posx][posy]:
+            if obj.IsBelongTo(Item):
+                self.GetItem(obj)
+                self.maze.DeleteObject(posx, posy, obj)
+                return

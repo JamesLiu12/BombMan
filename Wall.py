@@ -1,7 +1,7 @@
 from Obstacle import Obstacle
 class Wall(Obstacle):
-    def __init__(self, HP, item = None):
-        super().__init__(item)
+    def __init__(self, maze, HP, item = None):
+        super().__init__(maze, item)
         self.HP = HP
         self.HPGrids = [
             [['┌', '*', '#',None, '#', '┐'], ['#',None, '&',None, '#', '*'], ['└', '*', '*', '#',None, '┘']],
