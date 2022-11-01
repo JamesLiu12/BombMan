@@ -85,4 +85,5 @@ class Bot(Player):
         for i in range(y,y-self.GetBombDistance-1,-1):
             if not self.IfPosSafe(x,i,x,y):
                 a.append((x,y))
+        return a
 
