@@ -19,7 +19,7 @@ class Bomb(BaseObject):
         self.grids = [[None for j in range(6)] for i in range(3)]
         self.grids[0][1]='︵'
         self.grids[0][3]=''
-        self.grids[0][5]='∗'
+        self.grids[0][4]='∗'
         self.grids[1][0]='('
         self.grids[1][3]=')'
         self.grids[1][4]='╯'

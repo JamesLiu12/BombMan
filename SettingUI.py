@@ -4,7 +4,7 @@ class SettingUI:
     def __init__(self):
         file = open('Setting.cfg', 'r')
         self.mapSates = [0, 1, None]
-        self.playersSates =  [True if x == 'True' else False for x in file.readline().split(' ')]
+        self.playersSates =  [True if 'True' in x else False for x in file.readline().split(' ')]
         self.mapIndex = int(file.readline())
     def GetPlayerSates(self):
         return [Player if self.playersSates[i] else None for i in range(2)] + [Bot if self.playersSates[i] else None for i in range(2, 4)]
