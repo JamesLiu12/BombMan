@@ -1,5 +1,6 @@
 from Player import Player
 from collections import deque
+from Maze import Maze
 class Bot(Player):
     def __init__(self, maze, id, posx, posy, HP=3, speed=4, bombDelay=2):
         super().__init__(maze, None, None, None, None, None, id, posx, posy, HP, speed, bombDelay)
@@ -16,7 +17,7 @@ class Bot(Player):
             if abs(posy-y)>self.GetBombDistance:
                 return True
             for i in range(posy, y, abs(y-posy)//(y-posy)):
-                if Maze.IsBlockBeam(x,i):
+                if Maze.IsBlockBeam(x, i):
                     return True
         if posy == y:
             if abs(posx-x)>self.GetBombDistance:
@@ -44,9 +45,7 @@ class Bot(Player):
         while dui:
             b = dui.popleft()
             x , y = b[0] , b[1]
-            if a[x][y] > ((Player.GetBombtime) / self.speed):
-                return False, []
-            if Maze.blockMap[x][y] == 0 and self.IfPosSafe(x, y, posx, posy):
+            if not Maze.IsBolckPlayer(x,y) and self.IfPosSafe(x, y, posx, posy):
                 x2 = x
                 y2 = y
                 while h[x2][y2] != (posx, posy):
@@ -56,12 +55,17 @@ class Bot(Player):
                     x2 ,y2 = x3, y3
                 path.append((x2,y2))
                 path.reverse()
-                return True, path
+                f = True
+                for i in path:
+                    if not self.IfPathSafe(path):
+                        f = False
+                if f:
+                    return True, path
             for i in direc:
                 x1 = x + i[0]
                 y1 = y + i[1]
                 if 0 <= x1 < 13 and 0 <= y1 < 13:
-                    if a[x1][y1] == 0 and Maze.blockMap[x1][y1] == 0:
+                    if a[x1][y1] == 0 and not Maze.IsBolckPlayer(x,y):
                         dui.append([x1,y1])
                         h[x1][y1] = (x,y)
                         a[x1][y1] = a[x][y] + 1
