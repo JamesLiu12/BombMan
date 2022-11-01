@@ -16,13 +16,13 @@ class Bot(Player):
         if posx == x:
             if abs(posy-y)>self.GetBombDistance:
                 return True
-            for i in range(posy, y, abs(y-posy)//(y-posy)):
+            for i in range(posy+abs(y-posy)//(y-posy), y, abs(y-posy)//(y-posy)):
                 if Maze.IsBlockBeam(x, i):
                     return True
         if posy == y:
             if abs(posx-x)>self.GetBombDistance:
                 return True
-            for i in range(posx, x, abs(x-posx)//(x-posx)):
+            for i in range(posx+abs(x-posx)//(x-posx), x, abs(x-posx)//(x-posx)):
                 if Maze.IsBlockBeam(i, y):
                     return True
         return False
