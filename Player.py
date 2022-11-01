@@ -1,5 +1,4 @@
 from re import L
-import keyboard
 import time
 from colorama import Fore, Back, Style
 from Item_ATKup import Item_ATKup
@@ -11,6 +10,33 @@ from Item_HPup import Item_HPup
 from Item_SPDup import Item_SPDup
 from Item import Item
 from Bomb import Bomb
+import platform
+if platform.system() == 'Windows':
+    import keyboard
+else:
+    import sys
+    import tty
+    import termios
+    def readchar():
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+    def readkey(getchar_fn=None):
+        getchar = getchar_fn or readchar
+        c1 = getchar()
+        if ord(c1) != 0x1b:
+            return c1
+        c2 = getchar()
+        if ord(c2) != 0x5b:
+            return c1
+        c3 = getchar()
+        return chr(0x10 + ord(c3) - 65)
+
 class Player(BaseObject):
     def __init__(self, maze, key_up, key_down, key_left, key_right, key_setBomb, id, posx, posy, HP = 3, speed = 4, bombDelay = 2):
         super().__init__(maze)
@@ -57,19 +83,32 @@ class Player(BaseObject):
         return self.dirx != 0 or self.diry != 0
     def GetMoveDir(self):
         #TODO AA
-        if self.IsMoving() or self.IsInDamage() or self.IsDead(): return 0, 0
-        if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
-            return -1, 0
-        elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
-            return 1, 0
-        elif keyboard.is_pressed(self.key_left) and not keyboard.is_pressed(self.key_right):
-            return 0, -1
-        elif keyboard.is_pressed(self.key_right) and not keyboard.is_pressed(self.key_left):
-            return 0, 1
-        else: return 0, 0
+        if platform.system() == 'Windows':
+            if self.IsMoving() or self.IsInDamage() or self.IsDead(): return 0, 0
+            if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
+                return -1, 0
+            elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
+                return 1, 0
+            elif keyboard.is_pressed(self.key_left) and not keyboard.is_pressed(self.key_right):
+                return 0, -1
+            elif keyboard.is_pressed(self.key_right) and not keyboard.is_pressed(self.key_left):
+                return 0, 1
+            else: return 0, 0
+        else:
+            key = readkey()
+            if key == self.key_up: return -1, 0
+            elif key == self.key_down: return 1, 0
+            elif key == self.key_left: return 0, -1
+            elif key == self.key_right: return 0, 1
+            else: return 0, 0
     def IsSetBombPress(self):
         if float(time.perf_counter()) - self.preSetBombTime < self.setBombTimeGap: return False
-        return keyboard.is_pressed(self.key_setBomb)
+        if platform.system == 'Windows':
+            return keyboard.is_pressed(self.key_setBomb)
+        else:
+            key = readkey()
+            return key == self.key_setBomb
+            
     def SetBomb(self):
         bomb = Bomb(self.maze, self, self.posx, self.posy, self.bombDistance, self.atk, self.bombDelay, float(time.perf_counter()))
         self.bombs.append(bomb)
@@ -175,7 +214,7 @@ class Player(BaseObject):
 
     def GetBombtime(self):
         return self.bombDelay
-        
+
     def GetName(self):
         return 'Player ' + str(self.id)
         
