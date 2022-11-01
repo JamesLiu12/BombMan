@@ -74,15 +74,15 @@ class Bot(Player):
     def Bombrange(self,x,y):
         a = []
         for i in range(x,x+self.GetBombDistance+1):
-            if not self.IfPosSafe(i,y):
+            if not self.IfPosSafe(i,y,x,y):
                 a.append((x,y))
         for i in range(x,x-self.GetBombDistance-1,-1):
-            if not self.IfPosSafe(i,y):
+            if not self.IfPosSafe(i,y,x,y):
                 a.append((x,y))
         for i in range(y,y+self.GetBombDistance+1):
-            if not self.IfPosSafe(x,i):
+            if not self.IfPosSafe(x,i,x,y):
                 a.append((x,y))
         for i in range(y,y-self.GetBombDistance-1,-1):
-            if not self.IfPosSafe(x,i):
+            if not self.IfPosSafe(x,i,x,y):
                 a.append((x,y))
 
