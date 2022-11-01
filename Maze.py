@@ -18,18 +18,18 @@ from collections import deque
 from Storemap import Storemap
 from colorama import Fore, Back, Style
 class Maze:
-	def __init__(self, height, width, mapnum):
+	def __init__(self, height, width, mapNumber):
 		self.height = height
 		self.width = width
 		self.objectLists = [[[EmptySpace(self)] for j in range(width)] for i in range(height)]
 		self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
 		self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
 		self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
-		self.mapnumber=mapnum
-		if (mapnum == 514):
+		self.mapNumber=mapNumber
+		if mapNumber == None:
 			self.blockMap=Storemap().readmap(self.height,self.width)
 		else:
-			self.blockMap=Storemap().choosemap(self.mapnumber)
+			self.blockMap=Storemap().choosemap(self.mapNumber)
 		itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup]
 		maxRandomNumber = 10
 		for i in range(self.height):

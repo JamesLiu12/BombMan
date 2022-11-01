@@ -13,10 +13,10 @@ from Wall import Wall
 from colorama import Fore, Back, Style
 
 class Runner:
-    def __init__(self, fps, playerType1, playerType2, botType3, botType4):
+    def __init__(self, fps, playerType1, playerType2, botType3, botType4, mapState):
         self.fps = fps
         self.players = []
-        self.maze = Maze(13, 13, 1)
+        self.maze = Maze(13, 13, mapState)
         if playerType1 == Player: self.players.append(Player(self.maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1))
         if playerType2 == Player: self.players.append(Player(self.maze, keyboard.KEY_UP, keyboard.KEY_DOWN, '4', '6', '0', 2, 1, self.maze.width - 2))
         if botType3 == Bot: self.players.append(Bot(self.maze, 3, self.maze.height - 2, 1))
