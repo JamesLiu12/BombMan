@@ -4,3 +4,5 @@ class Bot(Player):
         super().__init__(maze, None, None, None, None, None, id, posx, posy, HP, speed, bombDelay)
     def IsBelongTo(self, typ):
         return typ == Bot or super().IsBelongTo(typ)
+    def GetName(self):
+        return 'Bot ' + str(self.id)

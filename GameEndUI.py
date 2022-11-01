@@ -1,10 +1,10 @@
 from SelectUI import *
 class GameEndUI():
     def __init__(self) -> None:
-        GameEndUI.quit = UI()
+        GameEndUI.quit = SelectUI()
     # input winner
 
-    def endpic(self,winner,surviver):
+    def ShowEndPic(self,winners,surviver):
         print("""\033[1;37;40m       
           _____                            _         _       _   _                 
          / ____|                          | |       | |     | | (_)                
@@ -15,14 +15,14 @@ class GameEndUI():
                             __/ |                                                  
                             |___/                                                                                                                                               
         \033[0m""")
-        if winner == surviver:
+        if surviver in winners:
 
-           print(winner,end=' ')
+           print(surviver.GetName(),end=' ')
            print("\033[5;31;40msurvives and wins the game, a living legend!!!'\033[0m")
         else:
-            print(winner,'wins the game with highest rank!!!')
-            print(surviver,'live to the last!!!')
-    def outrank(self,ranklist):
+            print(' '.join([winner.GetName() for winner in winners]),'wins the game with highest rank!!!')
+            print(surviver.GetName(),'live to the last!!!')
+    def OutRank(self,ranklist):
         #waiting for list type
         print('use key ENTER to quit game')
         quit = GameEndUI.quit.getdir()
@@ -30,6 +30,6 @@ class GameEndUI():
               print('use key ENTER to quit game')
               quit = GameEndUI.quit.getdir()
         
-n= GameEndUI()
+# n= GameEndUI()
 # n.endpic('Player2','Player2')
-n.outrank([1,2,3,4])
+# n.OutRank([1,2,3,4])

@@ -1,5 +1,6 @@
 import os
 from Bot import Bot
+from GameEndUI import GameEndUI
 from Item_ATKup import Item_ATKup
 from Beam import Beam
 from Bomb import Bomb
@@ -33,6 +34,17 @@ class Runner:
         for player in self.players:
             if not player.IsDead(): cnt += 1
         return cnt <= 1
+    def GetHighestScorePlayers(self):
+        players = []
+        for player in self.players:
+            if len(players) == 0: players.append(player)
+            elif players[0].GetScore() == player.GetScore(): players.append(player)
+            elif player[0].GetScore() < player.GetScore(): players = [player]
+        return players
+    def GetSurviver(self):
+        for player in self.players:
+            if not player.IsDead(): return player
+        return None
     def Run(self):
         while not self.GameOver():
             startTime = float(time.perf_counter())
@@ -87,3 +99,5 @@ class Runner:
             self.maze.Show()
             self.ShowScores()
             time.sleep(max(0, 1 / self.fps - (float(time.perf_counter()) - startTime)))
+        gameEndUI = GameEndUI()
+        gameEndUI.ShowEndPic(self.GetHighestScorePlayers(), self.GetSurviver())

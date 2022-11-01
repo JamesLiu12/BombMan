@@ -170,11 +170,14 @@ class Player(BaseObject):
     def GetBombDistance(self):
         return self.bombDistance
 
-    def getspeed(self):
+    def Getspeed(self):
         return self.speed
 
     def GetBombtime(self):
         return self.bombDelay
+        
+    def GetName(self):
+        return 'Player ' + str(self.id)
         
     def PeakUpItem(self, posx, posy):
         for obj in self.maze.objectLists[posx][posy]:
@@ -182,3 +185,4 @@ class Player(BaseObject):
                 self.GetItem(obj)
                 self.maze.DeleteObject(posx, posy, obj)
                 return
+                

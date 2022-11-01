@@ -155,7 +155,7 @@ class Maze:
 			if obj.IsBelongTo(Obstacle):
 				if obj.item != None:
 					self.InsertObject(obj.item, posx, posy)
-					beam.setBy.ChangeScore(obj.GetDeadScore())
+				beam.setBy.ChangeScore(obj.GetDeadScore())
 			elif obj.IsBelongTo(Player):
 				if obj.IsMoving(): self.DeleteObject(posx + obj.dirx, posy + obj.diry, obj)
 				beam.setBy.ChangeScore(obj.GetDeadScore() if obj != beam.setBy else -obj.GetDeadScore())
@@ -169,7 +169,7 @@ class Maze:
 			for j in range(13):
 				if self.blockMap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
 					a,b = self.FindWay(posx,posy,i,j)
-					if a <= ((Player.GetBombtime)//Bot.getspeed) and a <= min and a != 0:
+					if a <= ((Player.GetBombtime)//Bot.Getspeed) and a <= min and a != 0:
 						min = a
 						ans = b
 						f = True
