@@ -84,7 +84,7 @@ class GameStartUI():
             
             choose = self.choice.getdir()
         if pointer ==0:
-            runner = Runner(40, *self.settingUI.GetPlayerSates(), self.settingUI.GetmapSate())
+            runner = Runner(40, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState())
             runner.Run()
         elif pointer == 1:
             pass         #add setting menu!!!!!!!!
