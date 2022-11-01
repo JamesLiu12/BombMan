@@ -1,6 +1,5 @@
 from Player import Player
 from collections import deque
-from Maze import Maze
 class Bot(Player):
     def __init__(self, maze, id, posx, posy, HP=3, speed=4, bombDelay=2):
         super().__init__(maze, None, None, None, None, None, id, posx, posy, HP, speed, bombDelay)
@@ -17,20 +16,20 @@ class Bot(Player):
             if abs(posy-y)>self.GetBombDistance:
                 return True
             for i in range(posy+abs(y-posy)//(y-posy), y, abs(y-posy)//(y-posy)):
-                if Maze.IsBlockBeam(x, i):
+                if self.maze.IsBlockBeam(x, i):
                     return True
         if posy == y:
             if abs(posx-x)>self.GetBombDistance:
                 return True
             for i in range(posx+abs(x-posx)//(x-posx), x, abs(x-posx)//(x-posx)):
-                if Maze.IsBlockBeam(i, y):
+                if self.maze.IsBlockBeam(i, y):
                     return True
         return False
     def IfPathSafe(self, path):
         for i in player.bombs:
             for j in path:
                 if j in self.Bombrange(i.posx,i.posy):
-                    if i.setTime + Player.bombDelay -self.flickTimeGap < j / self.speed < i.setTime + Player.bombDelay +self.flickTimeGap:
+                    if i.setTime + Player.bombDelay - self.flickTimeGap < j / self.speed < i.setTime + Player.bombDelay +self.flickTimeGap:
                         return False
         return True
 
@@ -45,7 +44,7 @@ class Bot(Player):
         while dui:
             b = dui.popleft()
             x , y = b[0] , b[1]
-            if not Maze.IsBolckPlayer(x,y) and self.IfPosSafe(x, y, posx, posy):
+            if not self.maze.IsBolckPlayer(x,y) and self.IfPosSafe(x, y, posx, posy):
                 x2 = x
                 y2 = y
                 while h[x2][y2] != (posx, posy):
@@ -65,7 +64,7 @@ class Bot(Player):
                 x1 = x + i[0]
                 y1 = y + i[1]
                 if 0 <= x1 < 13 and 0 <= y1 < 13:
-                    if a[x1][y1] == 0 and not Maze.IsBolckPlayer(x,y):
+                    if a[x1][y1] == 0 and not self.maze.IsBolckPlayer(x,y):
                         dui.append([x1,y1])
                         h[x1][y1] = (x,y)
                         a[x1][y1] = a[x][y] + 1
