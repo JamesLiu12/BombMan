@@ -9,17 +9,14 @@ class SettingUI:
     def GetPlayerSates(self):
         return [Player if self.playersSates[i] else None for i in range(2)] + [Bot if self.playersSates[i] else None for i in range(2, 4)]
     def GetmapSate(self):
-        if self.mapSates[self.mapIndex] == 'None': return None
-        return int(self.mapSates[self.mapIndex])
+        return self.mapSates[self.mapIndex]
     def ChangePlayerState(self, playerIndex):
         self.playersSates[playerIndex] ^= True
         self.WriteToFile()
-    def ChangeMapNumber(self, dir):
-        self.mapIndex -= dir
-        if self.mapIndex == -1: self.mapIndex = len(self.mapSates) - 1
-        elif self.mapIndex >= len(self.mapSates): self.mapIndex = 0
+    def ChangeMapNumber(self, mapnum):
+        self.mapIndex=mapnum
         self.WriteToFile()
     def WriteToFile(self):
         file = open('Setting.cfg', 'w')
-        file.write(' '.join(list(map(str, self.playersSates))))
-        file.write(self.mapIndex)
+        file.write(' '.join(list(map(str, self.playersSates)))+'\n')
+        file.write(str(self.mapIndex))
