@@ -103,7 +103,7 @@ class Player(BaseObject):
             else: return 0, 0
     def IsSetBombPress(self):
         if float(time.perf_counter()) - self.preSetBombTime < self.setBombTimeGap: return False
-        if platform.system == 'Windows':
+        if platform.system() == 'Windows':
             return keyboard.is_pressed(self.key_setBomb)
         else:
             key = readkey()
