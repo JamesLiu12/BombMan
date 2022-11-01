@@ -14,28 +14,24 @@ import platform
 if platform.system() == 'Windows':
     import keyboard
 else:
-    import sys
-    import tty
-    import termios
-    def readchar():
+    import sys, tty, termios, fcntl, os
+    def read_char_no_blocking():
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
+        old_flags = fcntl.fcntl(fd, fcntl.F_GETFL)
         try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
+            tty.setraw(fd, termios.TCSADRAIN)
+            fcntl.fcntl(fd, fcntl.F_SETFL, old_flags | os.O_NONBLOCK)
+            return sys.stdin.read(1)
+        except IOError as e:
+            ErrorNumber = e[0]
+            # IOError with ErrorNumber 11(35 in Mac)  is thrown when there is nothing to read(Resource temporarily unavailable)
+            if (sys.platform.startswith("linux") and ErrorNumber != 11) or (sys.platform == "darwin" and ErrorNumber != 35):
+                raise
+            return ""
         finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return ch
-    def readkey(getchar_fn=None):
-        getchar = getchar_fn or readchar
-        c1 = getchar()
-        if ord(c1) != 0x1b:
-            return c1
-        c2 = getchar()
-        if ord(c2) != 0x5b:
-            return c1
-        c3 = getchar()
-        return chr(0x10 + ord(c3) - 65)
+            fcntl.fcntl(fd, fcntl.F_SETFL, old_flags)
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings) 
 
 class Player(BaseObject):
     def __init__(self, maze, key_up, key_down, key_left, key_right, key_setBomb, id, posx, posy, HP = 3, speed = 4, bombDelay = 2):
@@ -95,7 +91,7 @@ class Player(BaseObject):
                 return 0, 1
             else: return 0, 0
         else:
-            key = readkey()
+            key = read_char_no_blocking()
             if key == self.key_up: return -1, 0
             elif key == self.key_down: return 1, 0
             elif key == self.key_left: return 0, -1
@@ -106,7 +102,7 @@ class Player(BaseObject):
         if platform.system() == 'Windows':
             return keyboard.is_pressed(self.key_setBomb)
         else:
-            key = readkey()
+            key = read_char_no_blocking()
             return key == self.key_setBomb
             
     def SetBomb(self):

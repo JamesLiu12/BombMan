@@ -7,10 +7,10 @@ from Bomb import Bomb
 from Item_HPup import Item_HPup
 from Maze import Maze
 import time
-import keyboard
 from Player import Player
 from Wall import Wall
 from colorama import Fore, Back, Style
+import platform
 
 class Runner:
     def __init__(self, fps, playerType1, playerType2, botType3, botType4, mapState):
@@ -18,7 +18,7 @@ class Runner:
         self.players = []
         self.maze = Maze(13, 13, mapState)
         if playerType1 == Player: self.players.append(Player(self.maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1))
-        if playerType2 == Player: self.players.append(Player(self.maze, keyboard.KEY_UP, keyboard.KEY_DOWN, '4', '6', '0', 2, 1, self.maze.width - 2))
+        if playerType2 == Player: self.players.append(Player(self.maze, '8', '2', '4', '6', '0', 2, 1, self.maze.width - 2))
         if botType3 == Bot: self.players.append(Bot(self.maze, 3, self.maze.height - 2, 1))
         if botType4 == Bot: self.players.append(Bot(self.maze, 4, self.maze.height - 2, self.maze.width - 2))
         for player in self.players:
@@ -95,7 +95,7 @@ class Runner:
                         player.PeakUpItem(newPosx, newPosy)
                 else:
                     pass
-            os.system('cls')
+            os.system('cls' if platform.system() == 'Windows' else 'clear')
             self.maze.Show()
             self.ShowScores()
             time.sleep(max(0, 1 / self.fps - (float(time.perf_counter()) - startTime)))

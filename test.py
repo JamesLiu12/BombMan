@@ -23,11 +23,3 @@ import os
 #     while True:
 #         print('1')
 #         time.sleep(0.1)
-class A:
-    def __init__(self) -> None:
-        self.b = B(self)
-class B:
-    def __init__(self, a) -> None:
-        self.a = a
-a = A()
-print(id(a.b))

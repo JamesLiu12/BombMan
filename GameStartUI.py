@@ -6,6 +6,7 @@ import os
 from colorama import Fore, Back, Style
 import math
 from SettingUI import SettingUI
+import platform
 class GameStartUI():
     def __init__(self):
         
@@ -46,7 +47,7 @@ class GameStartUI():
               time.sleep(0.05*math.ln(i))
             else:time.sleep(0.05)
     def ShowSelect(self,choice,menul):
-        os.system ('cls')
+        os.system ('cls' if platform.system() == 'Windows' else 'clear')
         self.title()
         
         for i in range(len(menul)):
