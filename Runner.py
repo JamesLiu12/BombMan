@@ -42,7 +42,7 @@ class Runner:
         for player in self.players:
             if len(players) == 0: players.append(player)
             elif players[0].GetScore() == player.GetScore(): players.append(player)
-            elif player[0].GetScore() < player.GetScore(): players = [player]
+            elif players[0].GetScore() < player.GetScore(): players = [player]
         return players
     def GetSurviver(self):
         for player in self.players:
@@ -76,8 +76,7 @@ class Runner:
                             player.SetBomb()
                 if player.IsMoving():
                     newPosx, newPosy = player.posx + player.dirx, player.posy + player.diry
-                    if player.IsCanMove(axis = 0 if dirx != 0 else 1): 
-                        player.Move()
+                    player.Move()
                     if player.IsEndMove():
                         self.maze.DeleteObject(player.posx, player.posy, player)
                         player.InitParts()

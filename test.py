@@ -23,3 +23,6 @@ import os
 #     while True:
 #         print('1')
 #         time.sleep(0.1)
+a, b = 2, 3
+a, b = a - 1, b - 2
+print(a, b)

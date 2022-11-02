@@ -53,7 +53,7 @@ class Player(BaseObject):
         self.preDamageTime = False
         self.isBlockPlayer = True
         self.isBlockBeam = False
-        self.preMoveTime = 0
+        self.preMoveTime = float(time.perf_counter())
         self.preSetBombTime = 0
         self.setBombTimeGap = 1.5
         self.damageTimeGap = 1.5
@@ -117,12 +117,19 @@ class Player(BaseObject):
     def SetBeam(self, beam):
         self.beams.append(beam)
     def Move(self):
-        if self.dirx != 0: self.parts[0] -= 1
-        else: self.parts[1] -= 1
-        self.preMoveTime = float(time.perf_counter())
+        moveTimeGap = self.GetMoveTimeGap(0 if self.dirx != 0 else 1)
+        moveGridNumber = int((float(time.perf_counter()) - self.preMoveTime) // moveTimeGap)
+        if self.dirx != 0: 
+            moveGridNumber = min(moveGridNumber, self.parts[0])
+            self.parts[0] -= moveGridNumber
+        else: 
+            moveGridNumber = min(moveGridNumber, self.parts[1])
+            self.parts[1] -= moveGridNumber
+        self.preMoveTime = self.preMoveTime + moveGridNumber * moveTimeGap
     def StartMove(self, dirx, diry):
         self.dirx = dirx
         self.diry = diry
+        self.preMoveTime = float(time.perf_counter()) - self.GetMoveTimeGap(0 if dirx != 0 else 1)
     def IsEndMove(self):
         return self.parts[0] == 0 or self.parts[1] == 0
     def GetDamage(self):
@@ -155,7 +162,7 @@ class Player(BaseObject):
         self.bombDistance += x
     def ChangeScore(self, x):
         self.score += x
-    def GetTimeGap(self, axis):
+    def GetMoveTimeGap(self, axis):
         return 1 / self.speed / (3 if axis == 0 else 6)
     def GetDeadScore(self):
         return self.deadScore
@@ -164,7 +171,7 @@ class Player(BaseObject):
     def GetBombs(self):
         return self.bombs
     def IsCanMove(self, axis):
-        return float(time.perf_counter()) - self.preMoveTime >= self.GetTimeGap(axis) and not self.IsDead()
+        return float(time.perf_counter()) - self.preMoveTime >= self.GetMoveTimeGap(axis) and not self.IsDead()
     def InitParts(self):
         self.parts = [3, 6]
     def InitDir(self):

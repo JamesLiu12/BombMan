@@ -16,7 +16,7 @@ class SettingUI:
         return self.mapSates[self.mapIndex]
     def ChangePlayerState(self, playerIndex):
         self.playersStates[playerIndex] ^= True
-       
+        self.WriteToFile()
     def ChangeMapNumber(self, mapnum):
         self.mapIndex=mapnum
         self.WriteToFile()
