@@ -46,6 +46,7 @@ class GameStartUI():
             if i < 90:
               time.sleep(0.05*math.ln(i))
             else:time.sleep(0.05)
+
     def ShowSelect(self,choice,menul):
         os.system ('cls' if platform.system() == 'Windows' else 'clear')
         self.title()
@@ -79,58 +80,31 @@ class GameStartUI():
                 print()
         print(Style.RESET_ALL)
 
-    def ShowMenu(self):
-        menul = ['Start','Setting','Quit']
-        print('\r')
-        pointer = 0
-        self.ShowMainSelect(pointer,menul)
-        choose = self.choice.getdir()
-        while choose!=3:  #choose 
-            if pointer+choose<0:
-                pointer = len(menul)-1
-            elif pointer+choose>len(menul)-1:
-                pointer = 0  
+    def ShowSettingSelect(self,choice,menul):
+        os.system ('cls')
+        self.title()
+        print('\033[1;47;31muse direction key to control,w and d means go right menu, s and a means go left menu,use e to choose \033[0m')
+        print()
+        for i in range(len(menul)):
+            if i != 2:
+                if i != choice:
+                
+                    print(Fore.RED+Back.BLACK+menul[i],end='')
+                    print()
+                else:
+
+                    print(Fore.RED+Back.WHITE+menul[i], end = '')
+                    print()
             else:
-            
-                pointer+=choose
-             
-              
-            self.ShowMainSelect(pointer,menul)
-            
-            choose = self.choice.getdir()
-        if pointer ==0:
-            runner = Runner(40, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState())
-            runner.Run()
-        elif pointer == 1:
-            self.ShowSettings()
-            pass         #add setting menu!!!!!!!!
-        elif pointer == 2:
-            os._exit(0)
-    def ShowSettings(self):
-        menul = ['Player Setting','Map Setting','Back']
-        print('\r')
-        pointer = 0
-        self.ShowMainSelect(pointer,menul)
-        choose = self.choice.getdir()
-        while choose!=3:  #choose 
-            if pointer+choose<0:
-                pointer = len(menul)-1
-            elif pointer+choose>len(menul)-1:
-                pointer = 0  
-            else:
-            
-                pointer+=choose
-             
-              
-            self.ShowMainSelect(pointer,menul)
-            
-            choose = self.choice.getdir()
-        if pointer ==0:
-            self.PlayerSetting(0)
-        elif pointer == 1:
-            self.MapSettings()
-        elif pointer == 2:
-            self.ShowMenu()
+                if i != choice:
+                
+                    print(Fore.RED+Back.BLACK+menul[i],str(self.settingUI.FPS),end='')
+                    print()
+                else:
+
+                    print(Fore.RED+menul[i],Fore.RED+Back.WHITE+str(self.settingUI.FPS), end = '')
+                    print()
+        print(Style.RESET_ALL)
 
     def ShowPlayerSelect(self,choice,menul):
         os.system ('cls')
@@ -157,6 +131,62 @@ class GameStartUI():
                     print(Fore.RED+Back.WHITE+menul[i],end = '')
                     print()
         print(Style.RESET_ALL)
+
+    def ShowMenu(self):
+        menul = ['Start','Setting','Quit']
+        print('\r')
+        pointer = 0
+        self.ShowMainSelect(pointer,menul)
+        choose = self.choice.getdir()
+        while choose!=3:  #choose 
+            if pointer+choose<0:
+                pointer = len(menul)-1
+            elif pointer+choose>len(menul)-1:
+                pointer = 0  
+            else:
+            
+                pointer+=choose
+            self.ShowMainSelect(pointer,menul)
+            
+            choose = self.choice.getdir()
+        if pointer ==0:
+            runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState())
+            runner.Run()
+        elif pointer == 1:
+            self.ShowSettings(0)
+             #add setting menu!!!!!!!!
+        elif pointer == 2:
+            os._exit(0)
+
+    def ShowSettings(self,pointer):
+        menul = ['Player Setting','Map Setting','FPS','Back']
+        print('\r')
+        pointer = pointer
+        self.ShowSettingSelect(pointer,menul)
+        choose = self.choice.getdir()
+        while choose!=3:  #choose 
+            if pointer+choose<0:
+                pointer = len(menul)-1
+            elif pointer+choose>len(menul)-1:
+                pointer = 0  
+            else:
+            
+                pointer+=choose
+             
+              
+            self.ShowSettingSelect(pointer,menul)
+            
+            choose = self.choice.getdir()
+        if pointer ==0:
+            self.PlayerSetting(0)
+        elif pointer == 1:
+            self.MapSettings()
+        elif pointer == 2:
+            self.settingUI.changeFPS()
+            self.ShowSettingSelect(pointer,menul)
+            self.ShowSettings(pointer)
+        elif pointer == 3:
+            self.ShowMenu()
 
     def PlayerSetting(self,pointer):
         menul = ['Player1','Player2','Computer1','Computer2','Back']
@@ -194,7 +224,7 @@ class GameStartUI():
             self.ShowPlayerSelect(pointer,menul)
             self.PlayerSetting(pointer)
         elif pointer == 4:
-            self.ShowSettings()
+            self.ShowSettings(0)
     def MapSettings(self):
         menul = ['Map 1','Map 2','Custom','Back']
         print('\r')
@@ -213,15 +243,15 @@ class GameStartUI():
             choose = self.choice.getdir()
         if pointer ==0:
             self.settingUI.ChangeMapNumber(0)
-            self.ShowSettings()
+            self.ShowSettings(0)
         elif pointer == 1:
             self.settingUI.ChangeMapNumber(1)
-            self.ShowSettings()
+            self.ShowSettings(0)
         elif pointer == 2:
             self.settingUI.ChangeMapNumber(2)
-            self.ShowSettings()
+            self.ShowSettings(0)
         elif pointer == 3:
-            self.ShowSettings()
+            self.ShowSettings(0)
         
         
 # n = GameStartUI()

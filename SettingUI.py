@@ -9,7 +9,7 @@ class SettingUI:
         self.mapSates = [0, 1, None]
         self.playersStates =  [True if 'True' in x else False for x in file.readline().split(' ')]
         self.mapIndex = int(file.readline())
-    
+        self.FPS=int(file.readline())
     def GetPlayerStates(self):
         return [Player if self.playersStates[i] else None for i in range(2)] + [Bot if self.playersStates[i] else None for i in range(2, 4)]
     def GetmapState(self):
@@ -23,11 +23,16 @@ class SettingUI:
     def WriteToFile(self):
         file = open('Setting.cfg', 'w')
         file.write(' '.join(list(map(str, self.playersStates)))+'\n')
-        file.write(str(self.mapIndex))
+        file.write(str(self.mapIndex)+'\n')
+        file.write(str(self.FPS))
     def change_rate(rate):
         newr = int(input('enter prefered frame rate'))
         return newr
-        
+    def changeFPS(self):
+        self.FPS+=10
+        if self.FPS>100:
+            self.FPS=20
+        self.WriteToFile()
     def ShowSetting(self,choce,menul):
         os.system ('cls')
         
