@@ -25,6 +25,7 @@ class Maze:
 		self.backColors = [[[[Back.BLACK for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
 		self.foreColors = [[[[Fore.WHITE for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
 		self.grids = [[[[' ' for p in range(6)] for k in range(3)] for j in range(width)] for i in range(height)]
+		self.timeBeamAppearLists = [[[] for j in range(width)] for i in range(height)]
 		self.mapNumber=mapNumber
 		if mapNumber == None:
 			self.blockMap=Storemap().readmap(self.height,self.width)
@@ -131,7 +132,7 @@ class Maze:
 	def IsOutOfRange(self, posx, posy):
 		return posx < 0 or posx >= self.height or posy < 0 or posy >= self.width
 	
-	def IsBolckPlayer(self, posx, posy):
+	def IsBlockPlayer(self, posx, posy):
 		for obj in self.objectLists[posx][posy]:
 			if obj.isBlockPlayer: return True
 		return False
@@ -161,64 +162,27 @@ class Maze:
 				beam.setBy.ChangeScore(obj.GetDeadScore() if obj != beam.setBy else -obj.GetDeadScore())
 			self.DeleteObject(posx, posy, obj)
 
-	def Path(self, posx, posy):
-		min = 100000
-		ans = []
-		f = False
-		for i in range(13):
-			for j in range(13):
-				if self.blockMap[i][j] == 0 and self.IfPosSafe(i,j,posx,posy):
-					a,b = self.FindWay(posx,posy,i,j)
-					if a <= ((Player.GetBombtime)//Bot.Getspeed) and a <= min and a != 0:
-						min = a
-						ans = b
-						f = True
-		return f, ans
+	def GetHeight(self): return self.height
 
-	def IfPosSafe(self, posx, posy, x, y):
-		if posx != x and posy != y:
-			return True
-		if posx == x:
-			if abs(posy-y)>Player.GetBombDistance:
-				return True
-			for i in range(posy,y,abs(y-poy)//(y-posy)):
-				if self.IsBlockBeam(x,i):
-					return True
-		if posy == y:
-			if abs(posx-x)>Player.GetBombDistance:
-				return True
-			for i in range(posx,x,abs(x-pox)//(x-posx)):
-				if self.IsBlockBeam(i,y):
-					return True
-		return False
+	def GetWidth(self): return self.width
 
-	def FindWay(self, posx, posy, xx, yy):
-		direc = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-		dui = deque()
-		dui.append([posx,posy])
-		path=[]
-		h = [[0 for i in range(13)] for j in range(13)]
-		a = [[0 for i in range(13)] for j in range(13)]
-		while dui:
-			b = dui.popleft()
-			x , y = b[0] , b[1]
-			if x == xx and y == yy:
-				x2 = xx
-				y2 = yy
-				while h[x2][y2] != (posx, posy):
-					path.append((x2,y2))
-					x3 = h[x2][y2][0]
-					y3 = h[x2][y2][1]
-					x2 ,y2 = x3, y3
-				path.append((x2,y2))
-				path.reverse()
-				break
-			for i in direc:
-				x1 = x + i[0]
-				y1 = y + i[1]
-				if 0 <= x1 < 13 and 0 <= y1 < 13:
-					if a[x1][y1] == 0 and self.blockmap[x1][y1] == 0:
-						dui.append([x1,y1])
-						h[x1][y1] = (x,y)
-						a[x1][y1] = a[x][y] + 1
-		return a[xx][yy], path
+	def GetTimeBeamAppearLists(self): return self.timeBeamAppearLists
+
+	def InsertToTimeBeamAppear(self, bomb):
+		timeAppear = bomb.setTime + bomb.delay
+		self.timeBeamAppearLists[bomb.posx][bomb.posy].append(timeAppear)
+		dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+		for dirx, diry in dir:
+			for i in range(1, bomb.GetDistance()):
+				newPosx, newPosy = bomb.posx + i * dirx, bomb.posy + i * diry
+				if self.IsOutOfRange(newPosx, newPosy): break
+				self.timeBeamAppearLists[newPosx][newPosy].append(timeAppear)
+	def RemoveTimeBeamAppear(self, bomb):
+		timeAppear = bomb.setTime + bomb.delay
+		dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+		self.timeBeamAppearLists[bomb.posx][bomb.posy] = [x for x in self.timeBeamAppearLists[bomb.posx][bomb.posy] if x > timeAppear]
+		for dirx, diry in dir:
+			for i in range(1, bomb.GetDistance()):
+				newPosx, newPosy = bomb.posx + i * dirx, bomb.posy + i * diry
+				if self.IsOutOfRange(newPosx, newPosy): break
+				self.timeBeamAppearLists[newPosx][newPosy] = [x for x in self.timeBeamAppearLists[newPosx][newPosy] if x > timeAppear]

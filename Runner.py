@@ -11,6 +11,7 @@ from Player import Player
 from Wall import Wall
 from colorama import Fore, Back, Style
 import platform
+import random
 
 class Runner:
     def __init__(self, fps, playerType1, playerType2, botType3, botType4, mapState):
@@ -34,6 +35,8 @@ class Runner:
         for player in self.players:
             if not player.IsDead(): cnt += 1
         return cnt <= 1
+    def GetPlayers(self):
+        return self.players
     def GetHighestScorePlayers(self):
         players = []
         for player in self.players:
@@ -73,8 +76,8 @@ class Runner:
                             player.SetBomb()
                 if player.IsMoving():
                     newPosx, newPosy = player.posx + player.dirx, player.posy + player.diry
-                    if not player.IsCanMove(axis = 0 if dirx != 0 else 1): continue
-                    player.Move()
+                    if player.IsCanMove(axis = 0 if dirx != 0 else 1): 
+                        player.Move()
                     if player.IsEndMove():
                         self.maze.DeleteObject(player.posx, player.posy, player)
                         player.InitParts()
@@ -83,18 +86,30 @@ class Runner:
                     else:
                         self.maze.updateGrid(newPosx, newPosy)
                     self.maze.updateGrid(player.posx, player.posy)
-                elif not player.IsBelongTo(Bot):
-                    dirx, diry = player.GetMoveDir()
-                    if dirx == 0 and diry == 0: continue
+                else:
+                    if not player.IsBelongTo(Bot):
+                        dirx, diry = player.GetMoveDir()
                     else:
+                        isToSetBomb = random.random() <= player.GetSetBombProb()
+                        if isToSetBomb:
+                            print('f')
+                            dirx, diry = player.FindPathToSafePos(True)
+                            print('d')
+                            if dirx != 0 or diry != 0:
+                                if not self.maze.IsContainType(player.posx, player.posy, Bomb) and not player.IsDead() and not player.IsInDamage():
+                                    if player.IsSetBombTimeGapOver():
+                                        player.SetBomb()
+                        print('f')
+                        dirx, diry = player.FindPathToSafePos(False)
+                        print('d')
+                    if not (dirx == 0 and diry == 0):
                         newPosx = player.posx + dirx
                         newPosy = player.posy + diry
-                        if self.maze.IsBolckPlayer(newPosx, newPosy): continue
-                        player.StartMove(dirx, diry)
-                        self.maze.InsertObject(player, newPosx, newPosy)
-                        player.PeakUpItem(newPosx, newPosy)
-                else:
-                    pass
+                        if not self.maze.IsBlockPlayer(newPosx, newPosy):
+                            player.StartMove(dirx, diry)
+                            self.maze.InsertObject(player, newPosx, newPosy)
+                            player.PeakUpItem(newPosx, newPosy)
+
             os.system('cls' if platform.system() == 'Windows' else 'clear')
             self.maze.Show()
             self.ShowScores()

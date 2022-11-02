@@ -27,7 +27,9 @@ class Bomb(BaseObject):
         self.grids[2][3]=''
         self.backColors = [[Back.RED for j in range(6)] for i in range(3)]
     def isToExplode(self):
-        return float(time.perf_counter()) - self.setTime >= self.delay
+        res = float(time.perf_counter()) - self.setTime >= self.delay
+        if res: self.maze.RemoveTimeBeamAppear(self)
+        return res
     def IsBelongTo(self, typ):
         return typ == Bomb or super().IsBelongTo(typ)
     def GenerateBeam(self, posx, posy):
@@ -46,3 +48,5 @@ class Bomb(BaseObject):
                 self.maze.BeamEffect(newPosx, newPosy, beam)
                 self.maze.InsertObject(beam, newPosx, newPosy)
                 if isBlock: break
+    def GetDistance(self):
+        return self.distance

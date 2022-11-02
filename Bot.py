@@ -1,88 +1,79 @@
 from Player import Player
 from collections import deque
+from Bomb import Bomb
+import time
+import random
+
 class Bot(Player):
     def __init__(self, maze, id, posx, posy, HP=3, speed=4, bombDelay=2):
         super().__init__(maze, None, None, None, None, None, id, posx, posy, HP, speed, bombDelay)
         self.origGrids=[[None,'\\','~','/',None,None],['┌','□','_','□','┘',')'],[None,'/',None,'⁊',None,None]]
+        self.setBombProb = 0.5
     def IsBelongTo(self, typ):
         return typ == Bot or super().IsBelongTo(typ)
     def GetName(self):
         return 'Bot ' + str(self.id)
-
-    def IfPosSafe(self, posx, posy, x, y):
-        if posx != x and posy != y:
-            return True
-        if posx == x:
-            if abs(posy-y)>self.GetBombDistance:
-                return True
-            for i in range(posy+abs(y-posy)//(y-posy), y, abs(y-posy)//(y-posy)):
-                if self.maze.IsBlockBeam(x, i):
-                    return True
-        if posy == y:
-            if abs(posx-x)>self.GetBombDistance:
-                return True
-            for i in range(posx+abs(x-posx)//(x-posx), x, abs(x-posx)//(x-posx)):
-                if self.maze.IsBlockBeam(i, y):
-                    return True
-        return False
-    def IfPathSafe(self, path):
-        for i in player.bombs:
-            for j in path:
-                if j in self.Bombrange(i.posx,i.posy):
-                    if i.setTime + Player.bombDelay - self.flickTimeGap < j / self.speed < i.setTime + Player.bombDelay +self.flickTimeGap:
-                        return False
+    def GetSetBombProb(self):
+        return self.setBombProb
+    
+    def IsPosSafeToPass(self, posx, posy, distance, speed, newBomb = None):
+        timeBeamAppearList = self.maze.GetTimeBeamAppearLists()[posx][posy]
+        deviate = 0.1
+        for appearTime in timeBeamAppearList:
+            if (distance - 1) / speed + time.perf_counter() - deviate < appearTime < (distance + 1) / speed + time.perf_counter() + deviate: return False
+        if newBomb != None:
+            if (distance - 1) / speed + time.perf_counter() - deviate < newBomb.setTime + newBomb.delay < (distance + 1) / speed + time.perf_counter() +  deviate: return False
+        return True
+    def IsPosSafeToStay(self, posx, posy, newBomb = None):
+        if len(self.maze.GetTimeBeamAppearLists()[posx][posy]) != 0: return False
+        if newBomb != None:
+            if (posx == newBomb.posx or posy == newBomb.posy) and (abs(posx - newBomb.posx) < newBomb.GetDistance() or abs(posy - newBomb.posy) < newBomb.GetDistance()):
+                return False
         return True
 
-
-    def FindWay(self, posx, posy):
-        direc = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        dui = deque()
-        dui.append([posx,posy])
+    def FindPathToSafePos(self, isToSetBomb):
+        newBomb = None
+        if isToSetBomb: newBomb = Bomb(self.maze, self, self.posx, self.posy, self.bombDistance, self.atk, self.bombDelay, time.perf_counter())
+        # if self.IsPosSafeToStay(self.posx, self.posy, newBomb): return 0, 0
+        dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        random.shuffle(dir)
+        que = [(self.posx, self.posy)]
+        dis = [[0x3f3f3f3f for j in range(self.maze.GetWidth())] for i in range(self.maze.GetHeight())]
+        prePos = [[(None, None) for j in range(self.maze.GetWidth())] for i in range(self.maze.GetHeight())]
+        dis[self.posx][self.posy] = 0
+        destination = self.posx, self.posy
+        isFoundWay = False
+        while len(que) and not isFoundWay:
+            prePosx, prePosy = que[0]
+            del que[0]
+            for dirx, diry in dir:
+                newPosx = prePosx + dirx
+                newPosy = prePosy + diry
+                isSafeToPass = self.IsPosSafeToPass(newPosx, newPosy, dis[prePosx][prePosy] + 1, self.speed, newBomb)
+                if dis[newPosx][newPosy] <= dis[prePosx][prePosy] + 1: continue
+                if self.maze.IsOutOfRange(newPosx, newPosy) or self.maze.IsBlockPlayer(newPosx, newPosy) or not isSafeToPass:
+                    continue
+                if isSafeToPass:
+                    destination = newPosx, newPosy
+                que.append((newPosx, newPosy))
+                prePos[newPosx][newPosy] = prePosx, prePosy
+                dis[newPosx][newPosy] = dis[prePosx][prePosy] + 1
+                if self.IsPosSafeToStay(newPosx, newPosy, newBomb):
+                    destination = newPosx, newPosy
+                    isFoundWay = True
+                    break
         path = []
-        h = [[0 for i in range(13)] for j in range(13)]
-        a = [[0 for i in range(13)] for j in range(13)]
-        while dui:
-            b = dui.popleft()
-            x , y = b[0] , b[1]
-            if not self.maze.IsBolckPlayer(x,y) and self.IfPosSafe(x, y, posx, posy):
-                x2 = x
-                y2 = y
-                while h[x2][y2] != (posx, posy):
-                    path.append((x2,y2))
-                    x3 = h[x2][y2][0]
-                    y3 = h[x2][y2][1]
-                    x2 ,y2 = x3, y3
-                path.append((x2,y2))
-                path.reverse()
-                f = True
-                for i in path:
-                    if not self.IfPathSafe(path):
-                        f = False
-                if f:
-                    return True, path
-            for i in direc:
-                x1 = x + i[0]
-                y1 = y + i[1]
-                if 0 <= x1 < 13 and 0 <= y1 < 13:
-                    if a[x1][y1] == 0 and not self.maze.IsBolckPlayer(x,y):
-                        dui.append([x1,y1])
-                        h[x1][y1] = (x,y)
-                        a[x1][y1] = a[x][y] + 1
-        return False, []
-
-    def Bombrange(self,x,y):
-        a = []
-        for i in range(x,x+self.GetBombDistance+1):
-            if not self.IfPosSafe(i,y,x,y):
-                a.append((x,y))
-        for i in range(x,x-self.GetBombDistance-1,-1):
-            if not self.IfPosSafe(i,y,x,y):
-                a.append((x,y))
-        for i in range(y,y+self.GetBombDistance+1):
-            if not self.IfPosSafe(x,i,x,y):
-                a.append((x,y))
-        for i in range(y,y-self.GetBombDistance-1,-1):
-            if not self.IfPosSafe(x,i,x,y):
-                a.append((x,y))
-        return a
-
+        tempPosx, tempPosy = destination
+        while tempPosx != self.posx or tempPosy != self.posy:
+            path.append((tempPosx, tempPosy))
+            tempPosx, tempPosy = prePos[tempPosx][tempPosy]
+        path.reverse()
+        # prePosx, prePosy = path[0]
+        # for i in range(1, len(path)):
+        #     tempPosx, tempPosy = path[i][0], path[i][1]
+        #     path[i] = path[i][0] - prePosx, path[i][1] - prePosy
+        #     prePosx, prePosy = tempPosx, tempPosy
+        # path[0] = path[0][0] - self.posx, path[0][1] - self.posy
+        # return path
+        if len(path) == 0: return 0, 0
+        return path[0][0] - self.posx, path[0][1] - self.posy

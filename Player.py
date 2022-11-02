@@ -97,8 +97,11 @@ class Player(BaseObject):
             elif key == self.key_left: return 0, -1
             elif key == self.key_right: return 0, 1
             else: return 0, 0
+    
+    def IsSetBombTimeGapOver(self):
+        return float(time.perf_counter()) - self.preSetBombTime > self.setBombTimeGap
     def IsSetBombPress(self):
-        if float(time.perf_counter()) - self.preSetBombTime < self.setBombTimeGap: return False
+        if not self.IsSetBombTimeGapOver(): return False
         if platform.system() == 'Windows':
             return keyboard.is_pressed(self.key_setBomb)
         else:
@@ -110,6 +113,7 @@ class Player(BaseObject):
         self.bombs.append(bomb)
         self.preSetBombTime = float(time.perf_counter())
         self.maze.InsertObject(bomb, self.posx, self.posy)
+        self.maze.InsertToTimeBeamAppear(bomb)
     def SetBeam(self, beam):
         self.beams.append(beam)
     def Move(self):
@@ -157,6 +161,8 @@ class Player(BaseObject):
         return self.deadScore
     def GetScore(self):
         return self.score
+    def GetBombs(self):
+        return self.bombs
     def IsCanMove(self, axis):
         return float(time.perf_counter()) - self.preMoveTime >= self.GetTimeGap(axis) and not self.IsDead()
     def InitParts(self):
