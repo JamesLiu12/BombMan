@@ -240,4 +240,3 @@ class Player(BaseObject):
                 self.GetItem(obj)
                 self.maze.DeleteObject(posx, posy, obj)
                 return
-                
