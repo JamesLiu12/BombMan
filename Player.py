@@ -80,7 +80,6 @@ class Player(BaseObject):
     def GetMoveDir(self):
         #TODO AA
         if platform.system() == 'Windows':
-            if self.IsMoving() or self.IsInDamage() or self.IsDead(): return 0, 0
             if keyboard.is_pressed(self.key_up) and not keyboard.is_pressed(self.key_down):
                 return -1, 0
             elif keyboard.is_pressed(self.key_down) and not keyboard.is_pressed(self.key_up):
@@ -183,7 +182,13 @@ class Player(BaseObject):
     def IsBelongTo(self, typ):
         return typ == Player or super().IsBelongTo(typ)
     def GetItem(self, item):
-        if item.delay != None: self.buffs.append((item, time.perf_counter()))
+        newItem = False
+        if item.delay != None:
+            length = len(self.buffs)
+            self.buffs = [x for x in self.buffs if type(x) != type(item)]
+            if length == len(self.buffs): newItem = True
+            self.buffs.append((item, time.perf_counter()))
+            if not newItem: return
         if item.IsBelongTo(Item_ATKup):
             self.ChangeATK(item.val)
         elif item.IsBelongTo(Item_HPup):
@@ -226,6 +231,8 @@ class Player(BaseObject):
 
     def GetName(self):
         return 'Player ' + str(self.id)
+    def GetHP(self):
+        return self.HP
         
     def PeakUpItem(self, posx, posy):
         for obj in self.maze.objectLists[posx][posy]:

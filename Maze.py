@@ -31,8 +31,8 @@ class Maze:
 			self.blockMap=Storemap().readmap(self.height,self.width)
 		else:
 			self.blockMap=Storemap().choosemap(self.mapNumber)
-		itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup]
-		maxRandomNumber = 10
+		itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup, Item_BombDistanceUp]
+		maxRandomNumber = 15
 		for i in range(self.height):
 			for j in range(self.width):
 				if self.blockMap[i][j] == 4: 

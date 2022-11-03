@@ -18,6 +18,8 @@ class Runner:
         self.fps = fps
         self.players = []
         self.maze = Maze(13, 13, mapState)
+        self.gameDelayTime = 180
+        self.gameStartTime = 0
         if playerType1 == Player: self.players.append(Player(self.maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1))
         if playerType2 == Player: self.players.append(Player(self.maze, '8', '2', '4', '6', '0', 2, 1, self.maze.width - 2))
         if botType3 == Bot: self.players.append(Bot(self.maze, 3, self.maze.height - 2, 1))
@@ -25,12 +27,14 @@ class Runner:
         for player in self.players:
             self.maze.InsertObject(player, player.posx, player.posy)
     def ShowScores(self):
-        print(Fore.WHITE + 'Score: ')
+        print(Fore.WHITE + f'Time Remaining: {self.GetRemainTime()}s')
+        print(Fore.WHITE + '         ' + 'Score  ' + 'HP')
         for player in self.players:
-            name = 'Bot' if player.IsBelongTo(Bot) else 'Player'
-            print(Fore.WHITE + f'{name} {player.id}: {player.GetScore()}', end = '')
+            space = '   ' if player.IsBelongTo(Bot) else ''
+            print(Fore.WHITE + f'{player.GetName()}:{space} {player.GetScore()}     {player.GetHP()}', end = '')
             print()
     def GameOver(self):
+        if time.perf_counter() - self.gameStartTime >= self.gameDelayTime: return True
         cnt = 0
         for player in self.players:
             if not player.IsDead(): cnt += 1
@@ -48,7 +52,10 @@ class Runner:
         for player in self.players:
             if not player.IsDead(): return player
         return None
+    def GetRemainTime(self):
+        return int(self.gameDelayTime - (time.perf_counter() - self.gameStartTime))
     def Run(self):
+        self.gameStartTime = time.perf_counter()
         while not self.GameOver():
             startTime = float(time.perf_counter())
             for player in self.players:
@@ -85,22 +92,18 @@ class Runner:
                     else:
                         self.maze.updateGrid(newPosx, newPosy)
                     self.maze.updateGrid(player.posx, player.posy)
-                else:
+                elif not player.IsInDamage() and not player.IsDead():
                     if not player.IsBelongTo(Bot):
                         dirx, diry = player.GetMoveDir()
                     else:
                         isToSetBomb = random.random() <= player.GetSetBombProb()
                         if isToSetBomb:
-                            print('f')
                             dirx, diry = player.FindPathToSafePos(True)
-                            print('d')
                             if dirx != 0 or diry != 0:
                                 if not self.maze.IsContainType(player.posx, player.posy, Bomb) and not player.IsDead() and not player.IsInDamage():
                                     if player.IsSetBombTimeGapOver():
                                         player.SetBomb()
-                        print('f')
                         dirx, diry = player.FindPathToSafePos(False)
-                        print('d')
                     if not (dirx == 0 and diry == 0):
                         newPosx = player.posx + dirx
                         newPosy = player.posy + diry
