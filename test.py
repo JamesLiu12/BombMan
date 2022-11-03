@@ -1,6 +1,7 @@
 import time
 from pynput import keyboard
 import os
+import msvcrt
 # import msvcrt
 # def press(key):
 #     print(key)
@@ -23,6 +24,10 @@ import os
 #     while True:
 #         print('1')
 #         time.sleep(0.1)
-a, b = 2, 3
-a, b = a - 1, b - 2
-print(a, b)
+class A:
+    def __init__(self) -> None:
+        pass
+    def IsEqual(self, x):
+        return A == x
+a = A()
+print(a.IsEqual(type(a)))

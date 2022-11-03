@@ -8,7 +8,7 @@ class Bot(Player):
     def __init__(self, maze, id, posx, posy, HP=3, speed=4, bombDelay=2):
         super().__init__(maze, None, None, None, None, None, id, posx, posy, HP, speed, bombDelay)
         self.origGrids=[[None,'\\','~','/',None,None],['┌','□','_','□','┘',')'],[None,'/',None,'⁊',None,None]]
-        self.setBombProb = 0.5
+        self.setBombProb = 1
     def IsBelongTo(self, typ):
         return typ == Bot or super().IsBelongTo(typ)
     def GetName(self):
@@ -62,6 +62,8 @@ class Bot(Player):
                     destination = newPosx, newPosy
                     isFoundWay = True
                     break
+        if not isFoundWay and isToSetBomb:
+            return 0, 0
         path = []
         tempPosx, tempPosy = destination
         while tempPosx != self.posx or tempPosy != self.posy:
