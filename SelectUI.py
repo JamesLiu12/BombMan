@@ -1,8 +1,8 @@
 # new control
 import platform
-import msvcrt
 
 if platform.system() == 'Windows':     
+    import msvcrt
     from pynput.keyboard import Key,Listener
 
     from pynput import keyboard
