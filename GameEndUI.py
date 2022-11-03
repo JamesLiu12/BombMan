@@ -27,25 +27,28 @@ class GameEndUI:
              \_____|\__,_|_| |_| |_|\___|______|_| |_|\__,_|
                                                                                                                                                                                           
         \033[0m""")
-        combine = [[playersName[i],board[i]] for i in range(len(playerl))]
-        combine = array(combine)
-        combine = combine[combine[:,-1].argsort()][::-1]
-        combine = [[i[0],str(i[1])]for i in combine]
-        print(Fore.RED+Back.WHITE + 'Final Score:')
-        for i in combine: 
-           print(Fore.RED+Back.WHITE+' '.join(i))
-        maxscore = max(board)
         winner = []
-        for play in combine:
-            if int(play[1])==maxscore:
-                winner.append(play[0])
-        winner.reverse()
+        try:
+            combine = [[playersName[i],board[i]] for i in range(len(playerl))]
+            combine = array(combine)
+            combine = combine[combine[:,-1].argsort()][::-1]
+            combine = [[i[0],str(i[1])]for i in combine]
+            print(Fore.RED+Back.WHITE + 'Final Score:')
+            for i in combine: 
+                print(Fore.RED+Back.WHITE+' '.join(i))
+            maxscore = max(board)
+            for play in combine:
+                if int(play[1])==maxscore:
+                    winner.append(play[0])
+            winner.reverse()
+        except:
+            pass
         if len(winner) == 0:
             print('No winner!')
         else:
             print(Fore.RED+Back.WHITE+('Congratulations '+ ', '.join(winner)+' win with the highest score!'))
         if len(survive) == 0:
-            print('No one survive')
+            print('No one survive!')
         else:
             print(Fore.RED+Back.WHITE+('Congratulations '+ ', '.join(survive)+' survives from the bomb rain!'))
         print(Style.RESET_ALL)

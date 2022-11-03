@@ -17,7 +17,7 @@ class Runner:
         self.fps = fps
         self.players = []
         self.maze = Maze(13, 13, mapState)
-        self.gameDelayTime = 5
+        self.gameDelayTime = 180
         self.gameStartTime = 0
         if playerType1 == Player: self.players.append(Player(self.maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1))
         if playerType2 == Player: self.players.append(Player(self.maze, '8', '2', '4', '6', '0', 2, 1, self.maze.width - 2))
