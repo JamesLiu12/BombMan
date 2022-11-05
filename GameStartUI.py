@@ -78,17 +78,9 @@ class GameStartUI():
         self.title()
         print('\033[1;47;31muse direction key to control,w and d means go right menu, s and a means go left menu,use e to choose \033[0m')
         print()
+        DifficultyLevel=['Easy','Normal','Hard']
         for i in range(len(menul)):
-            if i != 2:
-                if i != choice:
-                
-                    print(Fore.RED+Back.BLACK+menul[i],end='')
-                    print()
-                else:
-
-                    print(Fore.RED+Back.WHITE+menul[i], end = '')
-                    print()
-            else:
+            if i == 2:
                 if i != choice:
                 
                     print(Fore.RED+Back.BLACK+menul[i],str(self.settingUI.FPS),end='')
@@ -96,6 +88,23 @@ class GameStartUI():
                 else:
 
                     print(Fore.RED+menul[i],Fore.RED+Back.WHITE+str(self.settingUI.FPS), end = '')
+                    print()
+
+            elif i==3:
+                if i != choice:
+                    print(Fore.RED+Back.BLACK+menul[i],DifficultyLevel[self.settingUI.difficulty],end='')
+                    print()
+                else:
+                    print(Fore.RED+menul[i],Fore.RED+Back.WHITE+DifficultyLevel[self.settingUI.difficulty], end = '')
+                    print()
+            else:
+                if i != choice:
+                
+                    print(Fore.RED+Back.BLACK+menul[i],end='')
+                    print()
+                else:
+
+                    print(Fore.RED+Back.WHITE+menul[i], end = '')
                     print()
         print(Style.RESET_ALL)
 
@@ -145,19 +154,18 @@ class GameStartUI():
                 choose = self.choice.getdir()
             if pointer ==0:
                 while True:
-                    runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState())
+                    runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),self.settingUI.difficulty)
                     runner.Run()
                     gameEndUI = GameEndUI()
                     if not gameEndUI.OutMenu(runner.GetSurvivers(), runner.GetPlayers()):
                         break
             elif pointer == 1:
                 self.ShowSettings(0)
-                #add setting menu!!!!!!!!
             elif pointer == 2:
                 os._exit(0)
 
     def ShowSettings(self,pointer):
-        menul = ['Player Setting','Map Setting','FPS','Back']
+        menul = ['Player Setting','Map Setting','FPS','Difficulty','Back']
         print('\r')
         pointer = pointer
         self.ShowSettingSelect(pointer,menul)
@@ -184,6 +192,11 @@ class GameStartUI():
             self.ShowSettingSelect(pointer,menul)
             self.ShowSettings(pointer)
         elif pointer == 3:
+            self.settingUI.eggcounter+=1
+            self.settingUI.ChangeDifficulty()
+            self.ShowSettingSelect(pointer,menul)
+            self.ShowSettings(pointer)
+        elif pointer == 4:
             pass
 
     def PlayerSetting(self,pointer):

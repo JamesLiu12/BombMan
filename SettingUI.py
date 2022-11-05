@@ -10,6 +10,8 @@ class SettingUI:
         self.playersStates =  [True if 'True' in x else False for x in file.readline().split(' ')]
         self.mapIndex = int(file.readline())
         self.FPS=int(file.readline())
+        self.difficulty=int(file.readline())
+        self.eggcounter=0
     def GetPlayerStates(self):
         return [Player if self.playersStates[i] else None for i in range(2)] + [Bot if self.playersStates[i] else None for i in range(2, 4)]
     def GetmapState(self):
@@ -20,11 +22,19 @@ class SettingUI:
     def ChangeMapNumber(self, mapnum):
         self.mapIndex=mapnum
         self.WriteToFile()
+    def ChangeDifficulty(self):
+        self.difficulty+=1
+        if self.difficulty==3 and self.eggcounter<20:
+            self.difficulty=0
+        if self.difficulty==4:
+            self.difficulty=0
+        self.WriteToFile()
     def WriteToFile(self):
         file = open('Setting.cfg', 'w')
         file.write(' '.join(list(map(str, self.playersStates)))+'\n')
         file.write(str(self.mapIndex)+'\n')
-        file.write(str(self.FPS))
+        file.write(str(self.FPS)+'\n')
+        file.write(str(self.difficulty))
     def change_rate(rate):
         newr = int(input('enter prefered frame rate'))
         return newr
