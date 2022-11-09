@@ -1,4 +1,3 @@
-from re import L
 import time
 from colorama import Fore, Back, Style
 from Item_ATKup import Item_ATKup

@@ -1,5 +1,5 @@
 from Player import Player
-from collections import deque
+
 from Bomb import Bomb
 import time
 import random
