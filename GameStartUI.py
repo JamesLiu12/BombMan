@@ -16,29 +16,42 @@ class GameStartUI():
         self.settingUI = SettingUI()
         # startUI.run = Runner(30)
     def title(self):
-        print("""\033[1;40;31m       
-                                                                    (   (
-    ____  __                 __  __                                 )\\  )\\      /___            ___ \\   \\  \\
-   / __ )/ /___ _      __  _/ /_/ /_  ___  ____ ___     __  ______ ((_)((_)    / ＼ ＼        ／ ／  \\   \\  \\    ︵ ∗
-  / __  / / __ \\ | /| / / /_ __/ __ \\/ _ \\/ __ `__ \\   / / / / __ \\/ / / /    |    ＼ ＼     ／ ／    |       / (  )╯
- / /_/ / / /_/ / |/ |/ /  / /_/ / / /  __/ / / / / /  / /_/ / /_/ /_/_/_/     |    ／ ／ ____＼ ＼    |      /   ︶
-/_____/_/\\____/|__/|__/   \\__/_/ /_/\\___/_/ /_/ /_/   \\__,_/ .___(_|_|_)      |   ／_／  \\  /  ＼_＼  |     ∕
-                                                          /_/                  \\ ——————   \/  ——————  /   ／
-                                                                                \\——————       —————— /  ㇒
-        \033[0m""")
+        if self.settingUI.platform==1:
+            print("""\033[1;40;31m       
+                                                                        (   (
+        ____  __                 __  __                                 )\\  )\\      /___            ___ \\   \\  \\
+       / __ )/ /___ _      __  _/ /_/ /_  ___  ____ ___     __  ______ ((_)((_)    / ＼ ＼        ／ ／  \\   \\  \\    ︵ ∗
+      / __  / / __ \\ | /| / / /_ __/ __ \\/ _ \\/ __ `__ \\   / / / / __ \\/ / / /    |    ＼ ＼     ／ ／    |       / (  )╯
+     / /_/ / / /_/ / |/ |/ /  / /_/ / / /  __/ / / / / /  / /_/ / /_/ /_/_/_/     |    ／ ／ ____＼ ＼    |      /   ︶
+    /_____/_/\\____/|__/|__/   \\__/_/ /_/\\___/_/ /_/ /_/   \\__,_/ .___(_|_|_)      |   ／_／  \\  /  ＼_＼  |     ∕
+                                                              /_/                  \\ ——————   \/  ——————  /   ／
+                                                                                    \\——————       —————— /  ㇒
+            \033[0m""")
+        else:
+            print("""\033[1;40;31m       
+                                                                        (   (
+        ____  __                 __  __                                 )\\  )\\      /___            ___ \\   \\  \\
+       / __ )/ /___ _      __  _/ /_/ /_  ___  ____ ___     __  ______ ((_)((_)    / ＼ ＼        ／ ／  \\   \\  \\    ︵ ∗
+      / __  / / __ \\ | /| / / /_ __/ __ \\/ _ \\/ __ `__ \\   / / / / __ \\/ / / /    |    ＼ ＼     ／ ／    |       / (  )╯
+     / /_/ / / /_/ / |/ |/ /  / /_/ / / /  __/ / / / / /  / /_/ / /_/ /_/_/_/     |    ／ ／ ____＼ ＼    |      /   ︶
+    /_____/_/\\____/|__/|__/   \\__/_/ /_/\\___/_/ /_/ /_/   \\__,_/ .___(_|_|_)      |   ／_／  \\  / ＼_＼   |    ∕
+                                                              /_/                  \\ ———— \/ ———— /   ／
+                                                                                    \\————    ————/  ㇒
+            \033[0m""")
         print()
     def progress_bar(self):
 
         for i in range(1, 101):
 
             print("\r", end="")
+            print(Fore.BLACK+Back.WHITE+"Full screen for better experience.".format(i), "" * (i // 2), end="")
 
-            print("loading progress: {}%: ".format(i), "" * (i // 2), end="")
+            print(Fore.RESET+Back.RESET+"                     loading progress: {}%: ".format(i), "" * (i // 2), end="")
 
             sys.stdout.flush()
             if i < 90:
-              time.sleep(0.05*math.ln(i))
-            else:time.sleep(0.05)
+              time.sleep(0.00007*(i**2-100*i+2500))
+            else:time.sleep(0.0001)
 
     def ShowSelect(self,choice,menul):
         os.system ('cls' if platform.system() == 'Windows' else 'clear')
@@ -78,7 +91,7 @@ class GameStartUI():
         self.title()
         print('\033[1;47;31muse direction key to control,w and d means go right menu, s and a means go left menu,use e to choose \033[0m')
         print()
-        DifficultyLevel=['Easy','Normal','Hard']
+        DifficultyLevel=['Easy','Normal','Hard','CheatMode']
         for i in range(len(menul)):
             if i == 2:
                 if i != choice:
@@ -133,13 +146,26 @@ class GameStartUI():
                     print(Fore.RED+Back.WHITE+menul[i],end = '')
                     print()
         print(Style.RESET_ALL)
+    def ShowPlatformSelect(self,choice,menul):
+        os.system ('cls' if platform.system() == 'Windows' else 'clear')
+        print("Are you playing on Cmd?")
+        print()
+        for i in range(len(menul)):
+            if i != choice:
+            
+                print(Fore.RED+Back.BLACK+menul[i],end='')
+                print()
+            else:
 
-    def ShowMenu(self):
-        menul = ['Start','Setting','Quit']
+                print(Fore.RED+Back.WHITE+menul[i], end = '')
+                print()
+        print(Style.RESET_ALL)
+    def AskPlatform(self):
+        menul = ['Yes','No']
         print('\r')
         pointer = 0
         while True:
-            self.ShowMainSelect(pointer,menul)
+            self.ShowPlatformSelect(pointer,menul)
             choose = self.choice.getdir()
             while choose!=3:  #choose 
                 if pointer+choose<0:
@@ -149,12 +175,47 @@ class GameStartUI():
                 else:
                 
                     pointer+=choose
-                self.ShowMainSelect(pointer,menul)
+                self.ShowPlatformSelect(pointer,menul)
+                
+                choose = self.choice.getdir()
+            if pointer ==0:
+                self.settingUI.platform=0
+                os.system ('cls' if platform.system() == 'Windows' else 'clear')
+                self.progress_bar()
+                self.ShowMenu()
+            elif pointer == 1:
+                self.settingUI.platform=1
+                os.system ('cls' if platform.system() == 'Windows' else 'clear')
+                self.progress_bar()
+                self.ShowMenu()
+    def ShowMenu(self):
+        menul = ['Start','Setting','Quit']
+        print('\r')
+        pointer = 0
+        
+        while True:
+            self.ShowMainSelect(pointer,menul)
+            choose = self.choice.getdir()
+            while choose!=3:  #choose 
+                if choose==114514:
+                    self.settingUI.CheatModeOn()
+                else:
+                    if pointer+choose<0:
+                        pointer = len(menul)-1
+                    elif pointer+choose>len(menul)-1:
+                        pointer = 0  
+                    else:
+                    
+                        pointer+=choose
+                    self.ShowMainSelect(pointer,menul)
                 
                 choose = self.choice.getdir()
             if pointer ==0:
                 while True:
-                    runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),self.settingUI.difficulty)
+                    if self.settingUI.difficulty==3:
+                        runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),2,1)
+                    else:
+                         runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),self.settingUI.difficulty,0)
                     runner.Run()
                     gameEndUI = GameEndUI()
                     if not gameEndUI.OutMenu(runner.GetSurvivers(), runner.GetPlayers()):
@@ -171,13 +232,16 @@ class GameStartUI():
         self.ShowSettingSelect(pointer,menul)
         choose = self.choice.getdir()
         while choose!=3:  #choose 
-            if pointer+choose<0:
-                pointer = len(menul)-1
-            elif pointer+choose>len(menul)-1:
-                pointer = 0  
+            if choose==114514:
+                self.settingUI.CheatModeOn()
             else:
-            
-                pointer+=choose
+                if pointer+choose<0:
+                    pointer = len(menul)-1
+                elif pointer+choose>len(menul)-1:
+                    pointer = 0  
+                else:
+                
+                    pointer+=choose
              
               
             self.ShowSettingSelect(pointer,menul)
@@ -192,7 +256,6 @@ class GameStartUI():
             self.ShowSettingSelect(pointer,menul)
             self.ShowSettings(pointer)
         elif pointer == 3:
-            self.settingUI.eggcounter+=1
             self.settingUI.ChangeDifficulty()
             self.ShowSettingSelect(pointer,menul)
             self.ShowSettings(pointer)
@@ -206,14 +269,17 @@ class GameStartUI():
         self.ShowPlayerSelect(pointer,menul)
         choose = self.choice.getdir()
         while choose!=3:  #choose 
-            if pointer+choose<0:
-                pointer = len(menul)-1
-            elif pointer+choose>len(menul)-1:
-                pointer = 0  
+            if choose == 114514:
+                self.settingUI.CheatModeOn()
             else:
-            
-                pointer+=choose
-             
+                if pointer+choose<0:
+                    pointer = len(menul)-1
+                elif pointer+choose>len(menul)-1:
+                    pointer = 0  
+                else:
+                
+                    pointer+=choose
+                 
               
             self.ShowPlayerSelect(pointer,menul)
             
@@ -243,12 +309,15 @@ class GameStartUI():
         self.ShowMainSelect(pointer,menul)
         choose = self.choice.getdir()
         while choose!=3:  #choose 
-            if pointer+choose<0:
-                pointer = len(menul)-1
-            elif pointer+choose>len(menul)-1:
-                pointer = 0  
+            if choose == 114514:
+                self.settingUI.CheatModeOn()
             else:
-                pointer+=choose
+                if pointer+choose<0:
+                    pointer = len(menul)-1
+                elif pointer+choose>len(menul)-1:
+                    pointer = 0  
+                else:
+                    pointer+=choose
              
             self.ShowMainSelect(pointer,menul)
             choose = self.choice.getdir()

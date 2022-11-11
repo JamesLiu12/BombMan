@@ -3,6 +3,7 @@ from Bot import Bot
 from SelectUI import SelectUI
 import os
 from colorama import Fore, Back, Style
+import math
 class SettingUI:
     def __init__(self):
         file = open('Setting.cfg', 'r')
@@ -11,7 +12,10 @@ class SettingUI:
         self.mapIndex = int(file.readline())
         self.FPS=int(file.readline())
         self.difficulty=int(file.readline())
-        self.eggcounter=0
+        if self.difficulty==3:
+            self.difficulty=2
+        self.platform=0
+        self.CheatMode=False
     def GetPlayerStates(self):
         return [Player if self.playersStates[i] else None for i in range(2)] + [Bot if self.playersStates[i] else None for i in range(2, 4)]
     def GetmapState(self):
@@ -24,11 +28,13 @@ class SettingUI:
         self.WriteToFile()
     def ChangeDifficulty(self):
         self.difficulty+=1
-        if self.difficulty==3 and self.eggcounter<20:
+        if self.difficulty==3 and self.CheatMode==False:
             self.difficulty=0
         if self.difficulty==4:
             self.difficulty=0
         self.WriteToFile()
+    def CheatModeOn(self):
+        self.CheatMode=True
     def WriteToFile(self):
         file = open('Setting.cfg', 'w')
         file.write(' '.join(list(map(str, self.playersStates)))+'\n')
