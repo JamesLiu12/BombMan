@@ -134,6 +134,8 @@ class Player(BaseObject):
         self.preDamageTime = float(time.perf_counter())
     def IsInDamage(self):
         return float(time.perf_counter()) - self.preDamageTime <= self.damageTimeGap
+    def IsImmovable(self):
+        return float(time.perf_counter()) - self.preDamageTime <= self.damageTimeGap-0.6
     def Flicking(self):
         if float(time.perf_counter()) - self.preFlickTime >= self.flickTimeGap:
             self.grids = self.origGrids if self.grids == self.flickGids else self.flickGids
