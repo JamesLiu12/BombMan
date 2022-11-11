@@ -14,7 +14,6 @@ class SettingUI:
         self.difficulty=int(file.readline())
         if self.difficulty==3:
             self.difficulty=2
-        self.platform=0
         self.CheatMode=False
     def GetPlayerStates(self):
         return [Player if self.playersStates[i] else None for i in range(2)] + [Bot if self.playersStates[i] else None for i in range(2, 4)]

@@ -16,27 +16,15 @@ class GameStartUI():
         self.settingUI = SettingUI()
         # startUI.run = Runner(30)
     def title(self):
-        if self.settingUI.platform==1:
-            print("""\033[1;40;31m       
+        print("""\033[1;40;31m       
                                                                         (   (
         ____  __                 __  __                                 )\\  )\\      /___            ___ \\   \\  \\
        / __ )/ /___ _      __  _/ /_/ /_  ___  ____ ___     __  ______ ((_)((_)    / ＼ ＼        ／ ／  \\   \\  \\    ︵ ∗
       / __  / / __ \\ | /| / / /_ __/ __ \\/ _ \\/ __ `__ \\   / / / / __ \\/ / / /    |    ＼ ＼     ／ ／    |       / (  )╯
      / /_/ / / /_/ / |/ |/ /  / /_/ / / /  __/ / / / / /  / /_/ / /_/ /_/_/_/     |    ／ ／ ____＼ ＼    |      /   ︶
     /_____/_/\\____/|__/|__/   \\__/_/ /_/\\___/_/ /_/ /_/   \\__,_/ .___(_|_|_)      |   ／_／  \\  /  ＼_＼  |     ∕
-                                                              /_/                  \\ ——————   \/  ——————  /   ／
-                                                                                    \\——————       —————— /  ㇒
-            \033[0m""")
-        else:
-            print("""\033[1;40;31m       
-                                                                        (   (
-        ____  __                 __  __                                 )\\  )\\      /___            ___ \\   \\  \\
-       / __ )/ /___ _      __  _/ /_/ /_  ___  ____ ___     __  ______ ((_)((_)    / ＼ ＼        ／ ／  \\   \\  \\    ︵ ∗
-      / __  / / __ \\ | /| / / /_ __/ __ \\/ _ \\/ __ `__ \\   / / / / __ \\/ / / /    |    ＼ ＼     ／ ／    |       / (  )╯
-     / /_/ / / /_/ / |/ |/ /  / /_/ / / /  __/ / / / / /  / /_/ / /_/ /_/_/_/     |    ／ ／ ____＼ ＼    |      /   ︶
-    /_____/_/\\____/|__/|__/   \\__/_/ /_/\\___/_/ /_/ /_/   \\__,_/ .___(_|_|_)      |   ／_／  \\  / ＼_＼   |    ∕
-                                                              /_/                  \\ ———— \/ ———— /   ／
-                                                                                    \\————    ————/  ㇒
+                                                              /_/                  \\ ------   \/  ------  /   ／
+                                                                                    \\------       ------ /  ㇒
             \033[0m""")
         print()
     def progress_bar(self):
@@ -146,48 +134,6 @@ class GameStartUI():
                     print(Fore.RED+Back.WHITE+menul[i],end = '')
                     print()
         print(Style.RESET_ALL)
-    def ShowPlatformSelect(self,choice,menul):
-        os.system ('cls' if platform.system() == 'Windows' else 'clear')
-        print("Are you playing on Cmd?")
-        print()
-        for i in range(len(menul)):
-            if i != choice:
-            
-                print(Fore.RED+Back.BLACK+menul[i],end='')
-                print()
-            else:
-
-                print(Fore.RED+Back.WHITE+menul[i], end = '')
-                print()
-        print(Style.RESET_ALL)
-    def AskPlatform(self):
-        menul = ['Yes','No']
-        print('\r')
-        pointer = 0
-        while True:
-            self.ShowPlatformSelect(pointer,menul)
-            choose = self.choice.getdir()
-            while choose!=3:  #choose 
-                if pointer+choose<0:
-                    pointer = len(menul)-1
-                elif pointer+choose>len(menul)-1:
-                    pointer = 0  
-                else:
-                
-                    pointer+=choose
-                self.ShowPlatformSelect(pointer,menul)
-                
-                choose = self.choice.getdir()
-            if pointer ==0:
-                self.settingUI.platform=0
-                os.system ('cls' if platform.system() == 'Windows' else 'clear')
-                self.progress_bar()
-                self.ShowMenu()
-            elif pointer == 1:
-                self.settingUI.platform=1
-                os.system ('cls' if platform.system() == 'Windows' else 'clear')
-                self.progress_bar()
-                self.ShowMenu()
     def ShowMenu(self):
         menul = ['Start','Setting','Quit']
         print('\r')
@@ -211,6 +157,7 @@ class GameStartUI():
                 
                 choose = self.choice.getdir()
             if pointer ==0:
+                self.progress_bar()
                 while True:
                     if self.settingUI.difficulty==3:
                         runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),2,1)
