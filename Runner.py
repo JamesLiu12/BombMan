@@ -21,9 +21,9 @@ class Runner:
         self.gameStartTime = 0
         self.difficulty=difficulty
         if playerType1 == Player: self.players.append(Player(self.maze, 'w', 's', 'a', 'd', ' ', 1, 1, 1,3+999999*CheatMode))
-        if playerType2 == Player: self.players.append(Player(self.maze, '8', '2', '4', '6', '0', 2, 1, self.maze.width - 2,3+999999*CheatMode))
+        if playerType2 == Player: self.players.append(Player(self.maze, '8', '2', '4', '6', '0', 2, self.maze.height - 2, self.maze.width - 2))
         if botType3 == Bot: self.players.append(Bot(self.maze, 3, self.maze.height - 2, 1,1+self.difficulty,3+(self.difficulty//2)))
-        if botType4 == Bot: self.players.append(Bot(self.maze, 4, self.maze.height - 2, self.maze.width - 2,1+self.difficulty,3+(self.difficulty//2)))
+        if botType4 == Bot: self.players.append(Bot(self.maze, 4, 1, self.maze.width - 2,1+self.difficulty,3+(self.difficulty//2)))
         for player in self.players:
             self.maze.InsertObject(player, player.posx, player.posy)
     def ShowScores(self):
