@@ -210,7 +210,7 @@ class GameStartUI():
             pass
 
     def PlayerSetting(self,pointer):
-        menul = ['Player1','Player2','Computer1','Computer2','Back']
+        menul = ['Player1','Player2','Robot1','Robot2','Back']
         print('\r')
         pointer = pointer
         self.ShowPlayerSelect(pointer,menul)
