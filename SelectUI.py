@@ -14,13 +14,6 @@ if platform.system() == 'Windows':
         def getdir(self):
             while True:
                 key = msvcrt.getwch()
-                """
-                print(ord(key))
-                print(type(key))
-                if(ord(key)==80):print('down')
-                if(ord(key)==72):print('up')
-                if(ord(key)==75):print('left')
-                if(ord(key)==77):print('right')"""
                 if not self.CheatOn:
                     if self.Cheatstep==0 and ord(key)==72:
                         self.Cheatstep+=1
@@ -50,6 +43,7 @@ if platform.system() == 'Windows':
                 elif key == 'd': self.Cheatstep=0;return 1
                 elif key == 'q': self.Cheatstep=0;return 2
                 elif key == 'e': self.Cheatstep=0;return 3
+                elif ord(key)==13 : self.Cheatstep=0;return 3
             
             
 else:
