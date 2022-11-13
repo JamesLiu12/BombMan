@@ -170,7 +170,7 @@ class GameStartUI():
             elif pointer == 1:
                 self.ShowSettings(0)
             elif pointer == 2:
-                os._exit(0)
+                return
 
     def ShowSettings(self,pointer):
         menul = ['Player Setting','Map Setting','FPS','Difficulty','Back']
