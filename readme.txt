@@ -5,7 +5,8 @@ If HP downs below 0, the player will be removed from the map. The game will last
 
 2.  Winning conditions:
 
-Once the game stops, there is a rating for each player. Surviving rank contains 80% of it and damage done contains 20%. This score will multiply with 1.5^n while n is killing number to form final score. Player with highest score wins.
+Once the game stops, there is a rating for each player,Player with highest score wins.
+The survivors from the game will also be mentioned.
 
 3.  Game Menu:
 
