@@ -22,12 +22,6 @@ else:
             tty.setraw(fd, termios.TCSADRAIN)
             fcntl.fcntl(fd, fcntl.F_SETFL, old_flags | os.O_NONBLOCK)
             return sys.stdin.read(1)
-        except IOError as e:
-            ErrorNumber = e[0]
-            # IOError with ErrorNumber 11(35 in Mac)  is thrown when there is nothing to read(Resource temporarily unavailable)
-            if (sys.platform.startswith("linux") and ErrorNumber != 11) or (sys.platform == "darwin" and ErrorNumber != 35):
-                raise
-            return ""
         finally:
             fcntl.fcntl(fd, fcntl.F_SETFL, old_flags)
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings) 
