@@ -3,7 +3,8 @@
 An interesting and classic bomb man game, use your bomb to defeat others,   try not to hurt yourself!
 
 ## Install Stage
-Download zip and click **main.exe** to start game  
+Download zip and extract all the file
+Run **main.py** to start the game
 Write in **yourmap.txt** directly to creat your own map
 ## Game Details
 Please read  **bombman.docx** and follow the guides
