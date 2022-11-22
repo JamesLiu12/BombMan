@@ -165,6 +165,7 @@ class GameStartUI():
                          runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),self.settingUI.difficulty,0)
                     runner.Run()
                     gameEndUI = GameEndUI()
+                    gameEndUI.ReadBuffer()
                     if not gameEndUI.OutMenu(runner.GetSurvivers(), runner.GetPlayers()):
                         break
             elif pointer == 1:

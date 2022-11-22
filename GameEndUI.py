@@ -4,6 +4,8 @@ from colorama import Fore, Back, Style
 import os
 from Runner import Runner
 import platform
+import time
+import msvcrt
 class GameEndUI:
     def __init__(self) -> None:
         self.choice = SelectUI()
@@ -103,7 +105,10 @@ class GameEndUI:
             return False
         elif pointer == 2:
             os._exit(0)
-        
-# n= GameEndUI()
-# n.endpic('Player2','Player2')
-# n.OutRank([1,2,3,4])
+    
+    def ReadBuffer(self):
+        if platform.system() == 'Windows':
+            while msvcrt.kbhit():
+                msvcrt.getch()
+        else:
+            return
