@@ -1,4 +1,4 @@
-# Bomb Man Game Project v0.1.1
+# Bomb Man Game Project v0.1.2
 ## Project Discriptionan  
 An interesting and classic bomb man game, use your bomb to defeat others,   try not to hurt yourself!
 
