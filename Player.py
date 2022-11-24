@@ -3,6 +3,7 @@ from colorama import Fore, Back, Style
 from Item_ATKup import Item_ATKup
 from BaseObject import BaseObject
 from Item_BombDelayDown import Item_BombDelayDown
+from Item_BombDelayUp import Item_BombDelayUp
 from Item_BombDistanceUp import Item_BombDistanceUp
 from Item_BombTimeGapDown import Item_BombTimeGapDown
 from Item_HPup import Item_HPup
@@ -218,6 +219,8 @@ class Player(BaseObject):
                     self.ChangeSetBombTimeGap(-item.val)
                 elif item.IsBelongTo(Item_BombDistanceUp):
                     self.ChangeBombDistance(item.val)
+                elif item.IsBelongTo(Item_BombDelayUp):
+                    self.ChangeBombDelay(item.val)
         for buff in deleteList:
             self.buffs.remove(buff)
 

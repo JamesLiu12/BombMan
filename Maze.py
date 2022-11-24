@@ -4,6 +4,7 @@ from Item import Item
 from Item_ATKup import Item_ATKup
 from Item_BombDelayDown import Item_BombDelayDown
 from Item_BombDistanceUp import Item_BombDistanceUp
+from Item_BombDelayUp import Item_BombDelayUp
 from Item_BombTimeGapDown import Item_BombTimeGapDown
 from Item_HPup import Item_HPup
 from Item_SPDup import Item_SPDup
@@ -31,7 +32,7 @@ class Maze:
 			self.blockMap=Storemap().readmap(self.height,self.width)
 		else:
 			self.blockMap=Storemap().choosemap(self.mapNumber)
-		itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup, Item_BombDistanceUp]
+		itemList = [Item_ATKup, Item_BombDelayDown, Item_BombTimeGapDown, Item_BombTimeGapDown, Item_HPup, Item_SPDup, Item_BombDistanceUp,Item_BombDelayUp]
 		maxRandomNumber = 15
 		for i in range(self.height):
 			for j in range(self.width):
