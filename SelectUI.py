@@ -58,10 +58,13 @@ else:
             self.CheatOn=False
         def getdir(self):
             while True:
-                orig_settings = termios.tcgetattr(sys.stdin)
-                tty.setcbreak(sys.stdin)
-                key = sys.stdin.read(1)[0]
-                termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
+                fd = sys.stdin.fileno()
+                old_settings = termios.tcgetattr(fd)
+                try:
+                    tty.setraw(sys.stdin.fileno())
+                    key = sys.stdin.read(1)
+                finally:
+                    termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
                 """
                 print(ord(key))
                 print(type(key))

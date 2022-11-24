@@ -35,7 +35,12 @@ class SettingUI:
     def CheatModeOn(self):
         self.CheatMode=True
     def WriteToFile(self):
-        file = open('Setting.cfg', 'w')
+        while True:
+            try:
+                file = open('Setting.cfg', 'w')
+                break
+            except:
+                pass
         file.write(' '.join(list(map(str, self.playersStates)))+'\n')
         file.write(str(self.mapIndex)+'\n')
         file.write(str(self.FPS)+'\n')

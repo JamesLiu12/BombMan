@@ -165,12 +165,13 @@ class GameStartUI():
                          runner = Runner(self.settingUI.FPS, *self.settingUI.GetPlayerStates(), self.settingUI.GetmapState(),self.settingUI.difficulty,0)
                     runner.Run()
                     gameEndUI = GameEndUI()
+                    gameEndUI.ReadBuffer()
                     if not gameEndUI.OutMenu(runner.GetSurvivers(), runner.GetPlayers()):
                         break
             elif pointer == 1:
                 self.ShowSettings(0)
             elif pointer == 2:
-                os._exit(0)
+                return
 
     def ShowSettings(self,pointer):
         menul = ['Player Setting','Map Setting','FPS','Difficulty','Back']
@@ -210,7 +211,7 @@ class GameStartUI():
             pass
 
     def PlayerSetting(self,pointer):
-        menul = ['Player1','Player2','Robot1','Robot2','Back']
+        menul = ['Player1','Player2','Robot3','Robot4','Back']
         print('\r')
         pointer = pointer
         self.ShowPlayerSelect(pointer,menul)
